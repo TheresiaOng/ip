@@ -154,8 +154,8 @@ public class Katsu {
     }
 
     public void startingText() {
-        String logo = Katsu.INDENT + " _  __     _             \n"
-                + Katsu.INDENT + "| |/ /__ _| |_ ___ _   _ \n"
+        String logo = Katsu.INDENT + " _  __     _\n"
+                + Katsu.INDENT + "| |/ /__ _| |_ ___ _   _\n"
                 + Katsu.INDENT + "| ' // _` | __/ __| | | |\n"
                 + Katsu.INDENT + "| . \\ (_| | |_\\__ \\ |_| |\n"
                 + Katsu.INDENT + "|_|\\_\\__,_|\\__|___/\\__,_|\n";

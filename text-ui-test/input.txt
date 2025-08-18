@@ -1,0 +1,24 @@
+todo
+todo read book
+deadline
+deadline submit paper
+deadline submit paper /by
+deadline /by sunday
+deadline submit paper /by sunday
+event
+event party
+event party /from
+event party /from sunday 2pm
+event party /from sunday 2pm /to
+event /from sunday 2pm /to 10pm
+event party /from sunday 2pm /to 10pm
+blah
+list
+ls
+mark 1
+mark 2
+mark 3
+unmark 1
+unmark 2
+unmark 3
+bye

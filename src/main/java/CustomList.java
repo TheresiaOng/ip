@@ -16,6 +16,7 @@ public class CustomList {
     public void printList() {
         int size = this.list.size();
 
+        System.out.println(Katsu.INDENT + "Here is all of your task, Quack!");
         for(int i = 0; i < size; i++) {
             int index = i + 1;
             System.out.println(Katsu.INDENT + index + ". " + this.list.get(i));

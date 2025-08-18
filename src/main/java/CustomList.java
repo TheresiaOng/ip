@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomList {
-    List<Task> list;
+    private List<Task> list;
 
     public CustomList() {
         this.list = new ArrayList<>();

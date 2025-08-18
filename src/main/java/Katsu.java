@@ -2,36 +2,40 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Katsu {
+    public static final String INDENT = "    ";
+
     public static void main(String[] args) {
+        CustomList list = new CustomList();
         boolean active = true;
         String name = "Katsu the Duck";
-        String indent = "    ";
-        String seperator = indent + "____________________________________________________________";
-        String logo = indent + " _  __     _             \n"
-                + indent + "| |/ /__ _| |_ ___ _   _ \n"
-                + indent + "| ' // _` | __/ __| | | |\n"
-                + indent + "| . \\ (_| | |_\\__ \\ |_| |\n"
-                + indent + "|_|\\_\\__,_|\\__|___/\\__,_|\n";
+        String separator = Katsu.INDENT + "____________________________________________________________";
+        String logo = Katsu.INDENT + " _  __     _             \n"
+                + Katsu.INDENT + "| |/ /__ _| |_ ___ _   _ \n"
+                + Katsu.INDENT + "| ' // _` | __/ __| | | |\n"
+                + Katsu.INDENT + "| . \\ (_| | |_\\__ \\ |_| |\n"
+                + Katsu.INDENT + "|_|\\_\\__,_|\\__|___/\\__,_|\n";
 
-        System.out.println(seperator);
+        System.out.println(separator);
         System.out.println(logo);
-        System.out.println(indent + "Hello! I'm " + name);
-        System.out.println(indent + "What can I do for you?");
-        System.out.println(seperator +"\n");
+        System.out.println(Katsu.INDENT + "Hello! I'm " + name);
+        System.out.println(Katsu.INDENT + "What can I do for you?");
+        System.out.println(separator +"\n");
 
         Scanner scanner = new Scanner(System.in);
         while (active) {
             String order = scanner.nextLine();
-            System.out.println(seperator);
+            System.out.println(separator);
 
             if (Objects.equals(order, "bye")) {
-                System.out.println(indent + "Quack. Hope to see you again soon!");
+                System.out.println(Katsu.INDENT + "Quack. Hope to see you again soon!");
                 active = false;
+            } else if (Objects.equals(order, "list")) {
+                list.printList();
             } else {
-                System.out.println(indent + "Quack " + order);
+                list.add(order);
             }
 
-            System.out.println(seperator + "\n");
+            System.out.println(separator + "\n");
         }
     }
 }

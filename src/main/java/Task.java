@@ -26,4 +26,9 @@ public class Task {
 
         return mark + " " + this.task;
     }
+
+    @Override
+    public String toString() {
+        return this.task;
+    }
 }

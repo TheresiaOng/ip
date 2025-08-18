@@ -8,11 +8,9 @@ public class CustomList {
         this.list = new ArrayList<>();
     }
 
-    public void add(String task) {
-        Task newTask = new Task(task);
-        this.list.add(newTask);
-
-        System.out.println(Katsu.INDENT + "added: " + task);
+    public void add(Task task) {
+        this.list.add(task);
+        System.out.println(Katsu.INDENT + "added: " + task.printTask());
     }
 
     public void markCompleted(String num) {

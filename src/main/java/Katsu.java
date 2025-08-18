@@ -42,6 +42,8 @@ public class Katsu {
                 katsu.addToDo(words);
             } else if ((Objects.equals(words[0], "deadline"))) {
                 katsu.addDeadline(words);
+            } else if ((Objects.equals(words[0], "event"))) {
+                katsu.addEvent(words);
             } else {
                 System.out.println(Katsu.INDENT + "Quack! I'm not sure what you mean.");
             }
@@ -78,7 +80,7 @@ public class Katsu {
 
     public void addDeadline(String[] words) {
         String newTask, newDeadline;
-        int newTaskUntil = findTask(words);
+        int newTaskUntil = findWord(words, "/by", -1);
 
         newTask = (newTaskUntil == -1)
                 ? String.join(" ", Arrays.copyOfRange(words, 1, words.length))
@@ -89,19 +91,66 @@ public class Katsu {
             return;
         }
 
-        if (newTaskUntil == -1) {
+        if (newTaskUntil == -1 || newTaskUntil + 1 >= words.length) {
             System.out.println(Katsu.INDENT + "Quack! Did you forget the deadline? (use /by followed by the deadline)");
             return;
         }
 
-        if (newTaskUntil + 1 < words.length) {
-            newDeadline = String.join(" ", Arrays.copyOfRange(words, newTaskUntil + 1, words.length));
-        } else {
-            System.out.println(Katsu.INDENT + "Quack! Did you forget the deadline? (use /by followed by the deadline)");
-            return;
-        }
+        newDeadline = String.join(" ", Arrays.copyOfRange(words, newTaskUntil + 1, words.length));
 
         this.list.add(new Deadline(newTask, newDeadline));
+    }
+
+    public void addEvent(String[] words) {
+        String newTask, newStartTime, newEndTime;
+
+        int newTaskUntil = findWord(words, "/from", -1);
+
+        newTask = (newTaskUntil == -1)
+                ? String.join(" ", Arrays.copyOfRange(words, 1, words.length))
+                : String.join(" ", Arrays.copyOfRange(words, 1, newTaskUntil));
+
+        if (newTask.isEmpty()) {
+            System.out.println(Katsu.INDENT + "Quack! What event would you like to add?");
+            return;
+        }
+
+        if (newTaskUntil == -1) {
+            System.out.println(Katsu.INDENT + "Quack! Did you forget the start time? (use /from followed by the start time)");
+            return;
+        }
+
+        int newStartUntil;
+
+        if (newTaskUntil + 1 < words.length) {
+            newStartUntil = findWord(words, "/to", newTaskUntil + 1);
+
+            newStartTime = (newStartUntil == -1)
+                    ? String.join(" ", Arrays.copyOfRange(words, newTaskUntil + 1, words.length))
+                    : String.join(" ", Arrays.copyOfRange(words, newTaskUntil + 1, newStartUntil));
+
+            if (newStartTime.isEmpty()) {
+                System.out.println(Katsu.INDENT + "Quack! When does the event start?");
+                return;
+            }
+
+            if (newStartUntil == -1) {
+                System.out.println(Katsu.INDENT + "Quack! Did you forget the end time? (use /to followed by the end time)");
+                return;
+            }
+        } else {
+            System.out.println(Katsu.INDENT + "Quack! Did you forget the start time? (use /from followed by the start time)");
+            return;
+        }
+
+        if (newStartUntil + 1 < words.length) {
+            newEndTime = String.join(" ", Arrays.copyOfRange(words, newStartUntil + 1, words.length));
+        } else {
+            System.out.println(Katsu.INDENT + "Quack! Did you forget the end time? (use /to followed by the end time)");
+            return;
+        }
+
+        this.list.add(new Event(newTask, newStartTime, newEndTime));
     }
 
     public void startingText() {
@@ -140,29 +189,17 @@ public class Katsu {
         }
     }
 
-    public int findTask(String[] words) {
+    public int findWord(String[] words, String word, int startFrom) {
         int stopIndex = -1;
+        int index = (startFrom == -1) ? 1 : startFrom;
 
-        for (int i = 1; i < words.length; i++) {
-            if (words[i].equals("/by")) {
+        for (int i = index; i < words.length; i++) {
+            if (words[i].equals(word)) {
                 stopIndex = i;
                 break;
             }
         }
 
          return stopIndex;
-    }
-
-    public int findBy(String[] words, int startIndex) {
-        int stopIndex = -1;
-
-        for (int i = startIndex; i < words.length; i++) {
-            if (words[i].equals("/to")) {
-                stopIndex = i;
-                break;
-            }
-        }
-
-        return stopIndex;
     }
 }

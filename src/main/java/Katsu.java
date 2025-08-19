@@ -9,6 +9,10 @@ public class Katsu {
     private boolean active;
     CustomList list;
 
+    public enum TaskType {
+        TODO, DEADLINE, EVENT
+    }
+
     public static void main(String[] args) {
         Katsu katsu = new Katsu();
         katsu.startingText();
@@ -41,11 +45,11 @@ public class Katsu {
                 String command = words[0];
                 katsu.handleMarking(command, words);
             } else if (Objects.equals(words[0], "todo")) {
-                katsu.addToDo(words);
+                katsu.addTask(words, TaskType.TODO);
             } else if ((Objects.equals(words[0], "deadline"))) {
-                katsu.addDeadline(words);
+                katsu.addTask(words, TaskType.DEADLINE);
             } else if ((Objects.equals(words[0], "event"))) {
-                katsu.addEvent(words);
+                katsu.addTask(words, TaskType.EVENT);
             } else {
                 System.out.println(Katsu.INDENT + "Quack! Sorry, I'm not sure what you meant... `•᷄ɞ•᷅");
             }
@@ -69,6 +73,20 @@ public class Katsu {
             this.list.printList();
         } else {
             System.out.println(Katsu.INDENT + "Quack! Your task list is empty.");
+        }
+    }
+
+    public void addTask(String[] words, TaskType type) {
+        switch (type) {
+            case TODO:
+                this.addToDo(words);
+                break;
+            case DEADLINE:
+                this.addDeadline(words);
+                break;
+            case EVENT:
+                this.addEvent(words);
+                break;
         }
     }
 

@@ -21,4 +21,9 @@ mark 3
 unmark 1
 unmark 2
 unmark 3
+delete
+delete 3
+del 2
+del 1
+ls
 bye

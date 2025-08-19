@@ -35,6 +35,8 @@ public class Katsu {
                 katsu.diactivate();
             } else if (Objects.equals(words[0], "list") || Objects.equals(words[0], "ls")) {
                 katsu.printList();
+            } else if (Objects.equals(words[0], "delete") || Objects.equals(words[0], "del")) {
+                katsu.handleDelete(words);
             } else if (Objects.equals(words[0], "mark") || (Objects.equals(words[0], "unmark"))) {
                 String command = words[0];
                 katsu.handleMarking(command, words);
@@ -63,7 +65,11 @@ public class Katsu {
     }
 
     public void printList() {
-        this.list.printList();
+        if (!this.list.isEmpty()) {
+            this.list.printList();
+        } else {
+            System.out.println(Katsu.INDENT + "Quack! Your task list is empty.");
+        }
     }
 
     public void addToDo(String[] words) {
@@ -186,6 +192,19 @@ public class Katsu {
             } else {
                 this.list.markUncompleted(taskNum);
             }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println(Katsu.INDENT + "⚠ Quack! You forgot the task number.");
+        } catch (NumberFormatException e) {
+            System.out.println(Katsu.INDENT + "⚠ Quack! That does not look like a number... •᷄ɞ•");
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println(Katsu.INDENT + "⚠ Quack! You do not have that task number.");
+        }
+    }
+
+    public void handleDelete(String[] words) {
+        try {
+            String taskNum = words[1];
+            this.list.deleteTask(taskNum);
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println(Katsu.INDENT + "⚠ Quack! You forgot the task number.");
         } catch (NumberFormatException e) {

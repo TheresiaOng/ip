@@ -45,7 +45,7 @@ public class Katsu {
             } else if ((Objects.equals(words[0], "event"))) {
                 katsu.addEvent(words);
             } else {
-                System.out.println(Katsu.INDENT + "Quack! I'm not sure what you mean.");
+                System.out.println(Katsu.INDENT + "Quack! Sorry, I'm not sure what you meant... `•᷄ɞ•᷅");
             }
 
             System.out.println(Katsu.SEPARATOR + "\n");
@@ -71,7 +71,7 @@ public class Katsu {
         String newTask = String.join(" ", Arrays.stream(words).skip(1).toArray(String[]::new));
 
         if (newTask.isEmpty()) {
-            System.out.println(Katsu.INDENT + "Quack! What todo would you like to add?");
+            System.out.println(Katsu.INDENT + "⚠ Quack! You're missing the todo's description.");
             return;
         }
 
@@ -87,12 +87,13 @@ public class Katsu {
                 : String.join(" ", Arrays.copyOfRange(words, 1, newTaskUntil));
 
         if (newTask.isEmpty()) {
-            System.out.println(Katsu.INDENT + "Quack! What deadline would you like to add?");
+            System.out.println(Katsu.INDENT + "⚠ Quack! You're missing the deadline's description.");
             return;
         }
 
         if (newTaskUntil == -1 || newTaskUntil + 1 >= words.length) {
-            System.out.println(Katsu.INDENT + "Quack! Did you forget the deadline? (use /by followed by the deadline)");
+            System.out.println(Katsu.INDENT + "⚠ Quack! You're missing the deadline.");
+            System.out.println(Katsu.INDENT + "(use '/by' followed by the deadline).");
             return;
         }
 
@@ -111,12 +112,13 @@ public class Katsu {
                 : String.join(" ", Arrays.copyOfRange(words, 1, newTaskUntil));
 
         if (newTask.isEmpty()) {
-            System.out.println(Katsu.INDENT + "Quack! What event would you like to add?");
+            System.out.println(Katsu.INDENT + "⚠ Quack! You're missing the event's description.");
             return;
         }
 
         if (newTaskUntil == -1) {
-            System.out.println(Katsu.INDENT + "Quack! Did you forget the start time? (use /from followed by the start time)");
+            System.out.println(Katsu.INDENT + "⚠ Quack! You're missing the event's starting time.");
+            System.out.println(Katsu.INDENT + "(use '/from' followed by the start time).");
             return;
         }
 
@@ -130,23 +132,27 @@ public class Katsu {
                     : String.join(" ", Arrays.copyOfRange(words, newTaskUntil + 1, newStartUntil));
 
             if (newStartTime.isEmpty()) {
-                System.out.println(Katsu.INDENT + "Quack! When does the event start?");
+                System.out.println(Katsu.INDENT + "⚠ Quack! You're missing the event's starting time.");
+                System.out.println(Katsu.INDENT + "(use '/from' followed by the start time).");
                 return;
             }
 
             if (newStartUntil == -1) {
-                System.out.println(Katsu.INDENT + "Quack! Did you forget the end time? (use /to followed by the end time)");
+                System.out.println(Katsu.INDENT + "⚠ Quack! You're missing the event's ending time.");
+                System.out.println(Katsu.INDENT + "(use '/to' followed by the end time).");
                 return;
             }
         } else {
-            System.out.println(Katsu.INDENT + "Quack! Did you forget the start time? (use /from followed by the start time)");
+            System.out.println(Katsu.INDENT + "⚠ Quack! You're missing the event's starting time.");
+            System.out.println(Katsu.INDENT + "(use '/from' followed by the start time).");
             return;
         }
 
         if (newStartUntil + 1 < words.length) {
             newEndTime = String.join(" ", Arrays.copyOfRange(words, newStartUntil + 1, words.length));
         } else {
-            System.out.println(Katsu.INDENT + "Quack! Did you forget the end time? (use /to followed by the end time)");
+            System.out.println(Katsu.INDENT + "⚠ Quack! You're missing the event's ending time.");
+            System.out.println(Katsu.INDENT + "(use '/to' followed by the end time).");
             return;
         }
 
@@ -162,13 +168,13 @@ public class Katsu {
 
         System.out.println(Katsu.SEPARATOR);
         System.out.println(logo);
-        System.out.println(Katsu.INDENT + "Hello! I'm " + Katsu.NAME);
+        System.out.println(Katsu.INDENT + "Hello! I'm " + Katsu.NAME + " ꒰ঌ( •ө• )໒꒱");
         System.out.println(Katsu.INDENT + "What can I do for you?");
         System.out.println(Katsu.SEPARATOR +"\n");
     }
 
     public void allCommands() {
-        System.out.println(Katsu.INDENT + "1. list (to show all of your tasks)");
+        System.out.println(Katsu.INDENT + "1. list / ls (to show all of your tasks)");
         System.out.println(Katsu.INDENT + "2. bye (to end our chat)");
     }
 
@@ -181,11 +187,11 @@ public class Katsu {
                 this.list.markUncompleted(taskNum);
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println(Katsu.INDENT + "Quack! Did you forget to give me a task number?");
+            System.out.println(Katsu.INDENT + "⚠ Quack! You forgot the task number.");
         } catch (NumberFormatException e) {
-            System.out.println(Katsu.INDENT + "Quack! That does not look like a number.");
+            System.out.println(Katsu.INDENT + "⚠ Quack! That does not look like a number... •᷄ɞ•");
         } catch (IndexOutOfBoundsException e) {
-            System.out.println(Katsu.INDENT + "Quack! Looks like you do not have that task number.");
+            System.out.println(Katsu.INDENT + "⚠ Quack! You do not have that task number.");
         }
     }
 

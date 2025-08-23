@@ -279,7 +279,9 @@ public class Katsu {
         Scanner scanner = new Scanner(save);
 
         while (scanner.hasNext()) {
-            System.out.println(scanner.nextLine());
+            String currLine = scanner.nextLine();
+            String[] taskDetails = currLine.split("\\s*\\|\\s*");
+            System.out.println(Arrays.toString(taskDetails));
         }
     }
 }

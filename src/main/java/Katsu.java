@@ -23,7 +23,10 @@ public class Katsu {
 
     public Katsu() {
         this.active = false;
-        this.list = new CustomList();
+
+        if (this.list == null) {
+            this.list = new CustomList();
+        }
     }
 
     public void run() {
@@ -34,6 +37,8 @@ public class Katsu {
             System.out.println(Katsu.INDENT + "Save file loaded.");
         } catch (FileNotFoundException e) {
             System.out.println("No save file found.");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Wrong task format in save file.");
         }
 
         this.startingText();
@@ -277,11 +282,30 @@ public class Katsu {
     public void loadSave() throws FileNotFoundException {
         File save = new File("data/katsuSave.txt");
         Scanner scanner = new Scanner(save);
+        this.list = new CustomList();
+        int index = 0;
 
         while (scanner.hasNext()) {
             String currLine = scanner.nextLine();
             String[] taskDetails = currLine.split("\\s*\\|\\s*");
-            System.out.println(Arrays.toString(taskDetails));
+
+            switch (taskDetails[0]) {
+                case "T":
+                    this.list.add(new ToDo(taskDetails[2]));
+                    break;
+                case "D":
+                    this.list.add(new Deadline(taskDetails[2], taskDetails[3]));
+                    break;
+                case "E":
+                    this.list.add(new Event(taskDetails[2], taskDetails[3], taskDetails[4]));
+                    break;
+            }
+
+            if (taskDetails[1].equals("1")) {
+                this.list.markCompleted(String.valueOf(index + 1));
+            }
+
+            index++;
         }
     }
 }

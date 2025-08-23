@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.util.Arrays;
 import java.util.Objects;
@@ -97,6 +99,14 @@ public class Katsu {
     }
 
     public void diactivate() {
+        try {
+            System.out.println("Saving tasks...");
+            this.save();
+            System.out.println("Saved successfully.");
+        } catch (IOException e) {
+            System.out.println("Error while saving file.");
+        }
+
         this.active = false;
         System.out.println(Katsu.INDENT + "Quack. Hope to see you again soon!");
     }
@@ -307,5 +317,19 @@ public class Katsu {
 
             index++;
         }
+    }
+
+    public void save() throws java.io.IOException{
+        FileWriter fw = new FileWriter("data/katsuSave.txt");
+        int size = this.list.size();
+        StringBuilder taskdetails = new StringBuilder();
+
+        for (int i = 0; i < size; i++) {
+            taskdetails.append(this.list.formatSave(i));
+            taskdetails.append("\n");
+        }
+
+        fw.write(taskdetails.toString());
+        fw.close();
     }
 }

@@ -10,4 +10,12 @@ public class Deadline extends Task {
     public String printTask() {
         return label + super.printTask() + " (by: " + this.deadline + ")";
     }
+
+    public String formatSave() {
+        return "D | " + super.formatSave() + " | " + this.deadline;
+    }
+
+    public String taskType() {
+        return "D";
+    }
 }

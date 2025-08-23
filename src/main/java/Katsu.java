@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.nio.file.NoSuchFileException;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
@@ -19,11 +22,20 @@ public class Katsu {
     }
 
     public Katsu() {
-        this.active = true;
+        this.active = false;
         this.list = new CustomList();
     }
 
     public void run() {
+        this.active = true;
+        try {
+            System.out.println(Katsu.INDENT + "Loading save file...");
+            this.loadSave();
+            System.out.println(Katsu.INDENT + "Save file loaded.");
+        } catch (FileNotFoundException e) {
+            System.out.println("No save file found.");
+        }
+
         this.startingText();
         Scanner scanner = new Scanner(System.in);
 
@@ -260,5 +272,14 @@ public class Katsu {
         }
 
          return stopIndex;
+    }
+
+    public void loadSave() throws FileNotFoundException {
+        File save = new File("data/katsuSave.txt");
+        Scanner scanner = new Scanner(save);
+
+        while (scanner.hasNext()) {
+            System.out.println(scanner.nextLine());
+        }
     }
 }

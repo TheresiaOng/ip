@@ -9,58 +9,74 @@ public class Katsu {
     private boolean active;
     CustomList list;
 
-    public enum TaskType {
-        TODO, DEADLINE, EVENT
-    }
-
     public static void main(String[] args) {
         Katsu katsu = new Katsu();
-        katsu.startingText();
+        katsu.run();
+    }
 
-        Scanner scanner = new Scanner(System.in);
-
-        while (katsu.active) {
-            String order = scanner.nextLine();
-
-            if (order.isEmpty()) {
-                System.out.println(Katsu.SEPARATOR);
-                System.out.println(Katsu.INDENT + "Quack! You need to write something!\n");
-                System.out.println(Katsu.INDENT + "Here is some commands to help you:");
-                katsu.allCommands();
-                System.out.println(Katsu.SEPARATOR + "\n");
-                continue;
-            }
-
-            // split words by empty space
-            String[] words = order.split(" ");
-            System.out.println(Katsu.SEPARATOR);
-
-            if (Objects.equals(words[0], "bye")) {
-                katsu.diactivate();
-            } else if (Objects.equals(words[0], "list") || Objects.equals(words[0], "ls")) {
-                katsu.printList();
-            } else if (Objects.equals(words[0], "delete") || Objects.equals(words[0], "del")) {
-                katsu.handleDelete(words);
-            } else if (Objects.equals(words[0], "mark") || (Objects.equals(words[0], "unmark"))) {
-                String command = words[0];
-                katsu.handleMarking(command, words);
-            } else if (Objects.equals(words[0], "todo")) {
-                katsu.addTask(words, TaskType.TODO);
-            } else if ((Objects.equals(words[0], "deadline"))) {
-                katsu.addTask(words, TaskType.DEADLINE);
-            } else if ((Objects.equals(words[0], "event"))) {
-                katsu.addTask(words, TaskType.EVENT);
-            } else {
-                System.out.println(Katsu.INDENT + "Quack! Sorry, I'm not sure what you meant... `•᷄ɞ•᷅");
-            }
-
-            System.out.println(Katsu.SEPARATOR + "\n");
-        }
+    public enum TaskType {
+        TODO, DEADLINE, EVENT
     }
 
     public Katsu() {
         this.active = true;
         this.list = new CustomList();
+    }
+
+    public void run() {
+        this.startingText();
+        Scanner scanner = new Scanner(System.in);
+
+        while (this.active) {
+            String order = scanner.nextLine();
+            this.handleCommand(order);
+        }
+    }
+
+    public void handleCommand(String order) {
+        if (order.isEmpty()) {
+            System.out.println(Katsu.SEPARATOR);
+            System.out.println(Katsu.INDENT + "Quack! You need to write something!\n");
+            System.out.println(Katsu.INDENT + "Here is some commands to help you:");
+            this.allCommands();
+            System.out.println(Katsu.SEPARATOR + "\n");
+            return;
+        }
+
+        // split words by empty space
+        String[] words = order.split(" ");
+        System.out.println(Katsu.SEPARATOR);
+
+        switch (words[0]) {
+            case "bye":
+                this.diactivate();
+                break;
+            case "list":
+            case "ls":
+                this.printList();
+                break;
+            case "delete":
+            case "del":
+                this.handleDelete(words);
+                break;
+            case "mark":
+            case "unmark":
+                this.handleMarking(words[0], words);
+                break;
+            case "todo":
+                this.addTask(words, TaskType.TODO);
+                break;
+            case "deadline":
+                this.addTask(words, TaskType.DEADLINE);
+                break;
+            case "event":
+                this.addTask(words, TaskType.EVENT);
+                break;
+            default:
+                System.out.println(Katsu.INDENT + "Quack! Sorry, I'm not sure what you meant... `•᷄ɞ•᷅");
+        }
+
+        System.out.println(Katsu.SEPARATOR + "\n");
     }
 
     public void diactivate() {

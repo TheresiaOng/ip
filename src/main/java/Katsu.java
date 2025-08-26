@@ -320,7 +320,9 @@ public class Katsu {
     }
 
     public void save() throws java.io.IOException{
-        FileWriter fw = new FileWriter("data/katsuSave.txt");
+        File save = new File("data/katsuSave.txt");
+        save.getParentFile().mkdirs();
+        FileWriter fw = new FileWriter(save);
         int size = this.list.size();
         StringBuilder taskdetails = new StringBuilder();
 

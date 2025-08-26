@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Objects;
@@ -163,7 +164,7 @@ public class Katsu {
         }
 
         newDeadline = String.join(" ", Arrays.copyOfRange(words, newTaskUntil + 1, words.length));
-        LocalDate deadline = stringToDateConverter(newDeadline);
+        LocalDateTime deadline = stringToDateTimeConverter(newDeadline);
 
         this.list.add(new Deadline(newTask, deadline));
     }
@@ -231,6 +232,11 @@ public class Katsu {
     public LocalDate stringToDateConverter(String dateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDate.parse(dateString, formatter);
+    }
+
+    public LocalDateTime stringToDateTimeConverter (String dateTimeString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return LocalDateTime.parse(dateTimeString, formatter);
     }
 
     public void startingText() {
@@ -311,7 +317,7 @@ public class Katsu {
                     this.list.add(new ToDo(taskDetails[2]));
                     break;
                 case "D":
-                    LocalDate deadline = stringToDateConverter(taskDetails[3]);
+                    LocalDateTime deadline = stringToDateTimeConverter(taskDetails[3]);
                     this.list.add(new Deadline(taskDetails[2], deadline));
                     break;
                 case "E":

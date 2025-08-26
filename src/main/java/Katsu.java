@@ -1,3 +1,8 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
@@ -19,11 +24,25 @@ public class Katsu {
     }
 
     public Katsu() {
-        this.active = true;
-        this.list = new CustomList();
+        this.active = false;
+
+        if (this.list == null) {
+            this.list = new CustomList();
+        }
     }
 
     public void run() {
+        this.active = true;
+        try {
+            System.out.println(Katsu.INDENT + "Loading save file...");
+            this.loadSave();
+            System.out.println(Katsu.INDENT + "Save file loaded.");
+        } catch (FileNotFoundException e) {
+            System.out.println(Katsu.INDENT + "No save file found.");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println(Katsu.INDENT + "Wrong task format in save file.");
+        }
+
         this.startingText();
         Scanner scanner = new Scanner(System.in);
 
@@ -80,6 +99,14 @@ public class Katsu {
     }
 
     public void diactivate() {
+        try {
+            System.out.println(Katsu.INDENT + "Saving tasks...");
+            this.save();
+            System.out.println(Katsu.INDENT + "Saved successfully.");
+        } catch (IOException e) {
+            System.out.println(Katsu.INDENT + "Error while saving file.");
+        }
+
         this.active = false;
         System.out.println(Katsu.INDENT + "Quack. Hope to see you again soon!");
     }
@@ -260,5 +287,49 @@ public class Katsu {
         }
 
          return stopIndex;
+    }
+
+    public void loadSave() throws FileNotFoundException {
+        File save = new File("data/katsuSave.txt");
+        Scanner scanner = new Scanner(save);
+        this.list = new CustomList();
+        int index = 0;
+
+        while (scanner.hasNext()) {
+            String currLine = scanner.nextLine();
+            String[] taskDetails = currLine.split("\\s*\\|\\s*");
+
+            switch (taskDetails[0]) {
+                case "T":
+                    this.list.add(new ToDo(taskDetails[2]));
+                    break;
+                case "D":
+                    this.list.add(new Deadline(taskDetails[2], taskDetails[3]));
+                    break;
+                case "E":
+                    this.list.add(new Event(taskDetails[2], taskDetails[3], taskDetails[4]));
+                    break;
+            }
+
+            if (taskDetails[1].equals("1")) {
+                this.list.markCompleted(String.valueOf(index + 1));
+            }
+
+            index++;
+        }
+    }
+
+    public void save() throws java.io.IOException{
+        FileWriter fw = new FileWriter("data/katsuSave.txt");
+        int size = this.list.size();
+        StringBuilder taskdetails = new StringBuilder();
+
+        for (int i = 0; i < size; i++) {
+            taskdetails.append(this.list.formatSave(i));
+            taskdetails.append("\n");
+        }
+
+        fw.write(taskdetails.toString());
+        fw.close();
     }
 }

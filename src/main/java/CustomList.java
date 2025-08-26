@@ -71,7 +71,15 @@ public class CustomList {
         }
     }
 
+    public String formatSave(int index) {
+        return this.list.get(index).formatSave();
+    }
+
     public boolean isEmpty() {
         return this.list.isEmpty();
+    }
+
+    public int size() {
+        return this.list.size();
     }
 }

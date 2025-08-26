@@ -1,7 +1,7 @@
 public class Task {
-    private boolean completed;
     private String task;
 
+    private boolean completed;
     public Task(String task) {
         this.completed = false;
         this.task = task;
@@ -25,6 +25,11 @@ public class Task {
         }
 
         return mark + " " + this.task;
+    }
+
+    public String formatSave() {
+        int complete = this.completed ? 1 : 0;
+        return complete + " | " + this.task;
     }
 
     @Override

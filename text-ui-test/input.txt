@@ -3,15 +3,15 @@ todo read book
 deadline
 deadline submit paper
 deadline submit paper /by
-deadline /by sunday
-deadline submit paper /by sunday
+deadline /by 2025-10-12
+deadline submit paper /by 2025-10-12
 event
 event party
 event party /from
-event party /from sunday 2pm
-event party /from sunday 2pm /to
-event /from sunday 2pm /to 10pm
-event party /from sunday 2pm /to 10pm
+event party /from 2025-12-05
+event party /from 2025-12-05 /to
+event /from 2025-12-05 /to 2025-12-06
+event party /from 2025-12-05 /to 2025-12-06
 blah
 list
 ls

@@ -16,8 +16,4 @@ public class Event extends Task{
     public String formatSave() {
         return "E | " + super.formatSave() + " | " + this.startTime + " | " + this.endTime;
     }
-
-    public String taskType() {
-        return "E";
-    }
 }

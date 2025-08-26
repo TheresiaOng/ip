@@ -38,9 +38,9 @@ public class Katsu {
             this.loadSave();
             System.out.println(Katsu.INDENT + "Save file loaded.");
         } catch (FileNotFoundException e) {
-            System.out.println("No save file found.");
+            System.out.println(Katsu.INDENT + "No save file found.");
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Wrong task format in save file.");
+            System.out.println(Katsu.INDENT + "Wrong task format in save file.");
         }
 
         this.startingText();
@@ -100,11 +100,11 @@ public class Katsu {
 
     public void diactivate() {
         try {
-            System.out.println("Saving tasks...");
+            System.out.println(Katsu.INDENT + "Saving tasks...");
             this.save();
-            System.out.println("Saved successfully.");
+            System.out.println(Katsu.INDENT + "Saved successfully.");
         } catch (IOException e) {
-            System.out.println("Error while saving file.");
+            System.out.println(Katsu.INDENT + "Error while saving file.");
         }
 
         this.active = false;

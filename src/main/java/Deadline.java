@@ -14,8 +14,4 @@ public class Deadline extends Task {
     public String formatSave() {
         return "D | " + super.formatSave() + " | " + this.deadline;
     }
-
-    public String taskType() {
-        return "D";
-    }
 }

@@ -15,10 +15,6 @@ public class Task {
         this.completed = false;
     }
 
-    public boolean isCompleted() {
-        return this.completed;
-    }
-
     public String printTask() {
         String mark;
 

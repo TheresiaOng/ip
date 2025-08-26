@@ -1,16 +1,24 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class Event extends Task{
     private static final String label = "[E]";
-    private String startTime;
-    private String endTime;
+    private LocalDate startTime;
+    private LocalDate endTime;
 
-    public Event(String task, String startTime, String endTime) {
+    public Event(String task, LocalDate startTime, LocalDate endTime) {
         super(task);
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
+    public String dateToString(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
+        return date.format(formatter);
+    }
+
     public String printTask() {
-        return label + super.printTask() + " (from: " + this.startTime + " to: " + this.endTime + ")";
+        return label + super.printTask() + " (from: " + this.dateToString(startTime) + " to: " + this.dateToString(endTime) + ")";
     }
 
     public String formatSave() {

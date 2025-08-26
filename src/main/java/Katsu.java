@@ -2,7 +2,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.NoSuchFileException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
@@ -25,10 +26,7 @@ public class Katsu {
 
     public Katsu() {
         this.active = false;
-
-        if (this.list == null) {
-            this.list = new CustomList();
-        }
+        this.list = new CustomList();
     }
 
     public void run() {
@@ -68,7 +66,7 @@ public class Katsu {
 
         switch (words[0]) {
             case "bye":
-                this.diactivate();
+                this.deactivate();
                 break;
             case "list":
             case "ls":
@@ -98,7 +96,7 @@ public class Katsu {
         System.out.println(Katsu.SEPARATOR + "\n");
     }
 
-    public void diactivate() {
+    public void deactivate() {
         try {
             System.out.println(Katsu.INDENT + "Saving tasks...");
             this.save();
@@ -165,8 +163,9 @@ public class Katsu {
         }
 
         newDeadline = String.join(" ", Arrays.copyOfRange(words, newTaskUntil + 1, words.length));
+        LocalDate deadline = stringToDateConverter(newDeadline);
 
-        this.list.add(new Deadline(newTask, newDeadline));
+        this.list.add(new Deadline(newTask, deadline));
     }
 
     public void addEvent(String[] words) {
@@ -223,7 +222,15 @@ public class Katsu {
             return;
         }
 
-        this.list.add(new Event(newTask, newStartTime, newEndTime));
+        LocalDate startTime = stringToDateConverter(newStartTime);
+        LocalDate endTime = stringToDateConverter(newEndTime);
+
+        this.list.add(new Event(newTask, startTime, endTime));
+    }
+
+    public LocalDate stringToDateConverter(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(dateString, formatter);
     }
 
     public void startingText() {
@@ -304,10 +311,13 @@ public class Katsu {
                     this.list.add(new ToDo(taskDetails[2]));
                     break;
                 case "D":
-                    this.list.add(new Deadline(taskDetails[2], taskDetails[3]));
+                    LocalDate deadline = stringToDateConverter(taskDetails[3]);
+                    this.list.add(new Deadline(taskDetails[2], deadline));
                     break;
                 case "E":
-                    this.list.add(new Event(taskDetails[2], taskDetails[3], taskDetails[4]));
+                    LocalDate startTime = stringToDateConverter(taskDetails[3]);
+                    LocalDate endTime = stringToDateConverter(taskDetails[4]);
+                    this.list.add(new Event(taskDetails[2], startTime, endTime));
                     break;
             }
 

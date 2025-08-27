@@ -23,7 +23,7 @@ import java.util.Scanner;
  * The <code>Katsu</code> object runs the main program loop and executes user commands.
  */
 public class Katsu {
-    public static final String NAME = "katsu.Katsu the Duck";
+    public static final String NAME = "Katsu the Duck";
     private boolean active;
     private CustomList list;
     private Storage storage;

@@ -3,8 +3,8 @@ todo read book
 deadline
 deadline submit paper
 deadline submit paper /by
-deadline /by 2025-10-12
-deadline submit paper /by 2025-10-12
+deadline /by 2025-10-12 14:35
+deadline submit paper /by 2025-10-12 14:35
 event
 event party
 event party /from

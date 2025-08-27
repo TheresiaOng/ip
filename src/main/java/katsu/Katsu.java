@@ -17,6 +17,11 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
 
+/**
+ * Main class for Katsu the Duck application.
+ * Handles task management, user interface, and storage operations.
+ * The <code>Katsu</code> object runs the main program loop and executes user commands.
+ */
 public class Katsu {
     public static final String NAME = "katsu.Katsu the Duck";
     private boolean active;
@@ -24,6 +29,10 @@ public class Katsu {
     private Storage storage;
     private UI ui;
 
+    /**
+     * Starting point of the program.
+     * Creates a new <code>Katsu</code> object and run it.
+     */
     public static void main(String[] args) {
         Katsu katsu = new Katsu();
         katsu.run();
@@ -33,6 +42,11 @@ public class Katsu {
         TODO, DEADLINE, EVENT
     }
 
+    /**
+     * Constructs a new <code>Katsu</code> object.
+     * Initializes task list, storage, and UI components.
+     * The application is initially inactive.
+     */
     public Katsu() {
         this.active = false;
         this.list = new CustomList();
@@ -40,6 +54,11 @@ public class Katsu {
         this.ui = new UI();
     }
 
+    /**
+     * Starts the Katsu application.
+     * Loads tasks from storage, prints the welcome message, and listens for user input
+     * until the application is deactivated.
+     */
     public void run() {
         this.active = true;
         try {
@@ -59,21 +78,41 @@ public class Katsu {
         }
     }
 
+    /**
+     * Converts a date string into a <code>LocalDate</code> object.
+     *
+     * @param dateString The date in "yyyy-MM-dd" format.
+     * @return <code>LocalDate</code> representing the input string.
+     */
     public static LocalDate stringToDateConverter(String dateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDate.parse(dateString, formatter);
     }
 
+    /**
+     * Converts a date and time string into a <code>LocalDateTime</code> object.
+     *
+     * @param dateTimeString The date in "yyyy-MM-dd HH:mm" format.
+     * @return <code>LocalDateTime</code> representing the input string.
+     */
     public static LocalDateTime stringToDateTimeConverter (String dateTimeString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return LocalDateTime.parse(dateTimeString, formatter);
     }
 
+    /**
+     * Prints all available commands to user.
+     */
     public static void allCommands() {
         System.out.println(UI.INDENT + "1. list / ls (to show all of your katsu.tasks)");
         System.out.println(UI.INDENT + "2. bye (to end our chat)");
     }
 
+    /**
+     * Deactivate the Katsu application.
+     * Saves tasks to storage, sets active as false, and prints
+     * "Quack. Hope to see you again soon!".
+     */
     public void deactivate() {
         try {
             this.storage.save(this.list);
@@ -85,6 +124,10 @@ public class Katsu {
         System.out.println(UI.INDENT + "Quack. Hope to see you again soon!");
     }
 
+    /**
+     * Print all task in the task list if not empty
+     * else will print "Quack! Your task list is empty.".
+     **/
     public void printList() {
         if (!this.list.isEmpty()) {
             this.list.printList();
@@ -93,6 +136,13 @@ public class Katsu {
         }
     }
 
+    /**
+     * Adds a task to the task list.
+     * The type of task is determined by the <code>TaskType</code> parameter.
+     *
+     * @param words Array of user input words for the task.
+     * @param type Type of task to add (TODO, DEADLINE, EVENT).
+     */
     public void addTask(String[] words, TaskType type) {
         switch (type) {
             case TODO:
@@ -107,6 +157,11 @@ public class Katsu {
         }
     }
 
+    /**
+     * Adds a task of type TODO to the task list.
+     *
+     * @param words Array of user input words for the task.
+     */
     public void addToDo(String[] words) {
         // join words from index 1 until array length to get task
         String newTask = String.join(" ", Arrays.stream(words).skip(1).toArray(String[]::new));
@@ -119,6 +174,11 @@ public class Katsu {
         this.list.add(new ToDo(newTask));
     }
 
+    /**
+     * Adds a task of type DEADLINE to the task list.
+     *
+     * @param words Array of user input words for the task.
+     */
     public void addDeadline(String[] words) {
         String newTask, newDeadline;
         int newTaskUntil = Parser.findWord(words, "/by", -1);
@@ -144,6 +204,11 @@ public class Katsu {
         this.list.add(new Deadline(newTask, deadline));
     }
 
+    /**
+     * Adds a task of type EVENT to the task list.
+     *
+     * @param words Array of user input words for the task.
+     */
     public void addEvent(String[] words) {
         String newTask, newStartTime, newEndTime;
 
@@ -204,7 +269,13 @@ public class Katsu {
         this.list.add(new Event(newTask, startTime, endTime));
     }
 
-
+    /**
+     * Handle marking task in the task list.
+     * Either mark or unmark the task as done.
+     *
+     * @param command Either "mark" or "unmark".
+     * @param words Array of user input words for the task.
+     */
     public void handleMarking(String command, String[] words) {
         try {
             String taskNum = words[1];
@@ -222,6 +293,11 @@ public class Katsu {
         }
     }
 
+    /**
+     * Handle deletion of task in the task list.
+     *
+     * @param words Array of user input words for the task.
+     */
     public void handleDelete(String[] words) {
         try {
             String taskNum = words[1];

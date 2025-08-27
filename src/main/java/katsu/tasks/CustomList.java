@@ -1,3 +1,6 @@
+package katsu.tasks;
+import katsu.ui.UI;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +21,7 @@ public class CustomList {
         if (size == 1) {
             System.out.println(UI.INDENT + "You now have 1 task in the list.");
         } else {
-            System.out.println(UI.INDENT + "You now have " + size + " tasks in the list.");
+            System.out.println(UI.INDENT + "You now have " + size + " katsu.tasks in the list.");
         }
     }
 
@@ -57,7 +60,7 @@ public class CustomList {
         } else if (size == 1){
             System.out.println(UI.INDENT + "You now have 1 task in the list.");
         } else {
-            System.out.println(UI.INDENT + "You now have " + size + " tasks in the list.");
+            System.out.println(UI.INDENT + "You now have " + size + " katsu.tasks in the list.");
         }
     }
 

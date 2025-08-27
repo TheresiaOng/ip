@@ -1,3 +1,5 @@
+package katsu.tasks;
+
 public class ToDo extends Task{
     private static final String label = "[T]";
 

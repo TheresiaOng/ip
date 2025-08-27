@@ -1,6 +1,14 @@
-import java.io.File;
+package katsu;
+
+import katsu.parser.Parser;
+import katsu.storage.Storage;
+import katsu.tasks.CustomList;
+import katsu.tasks.Deadline;
+import katsu.tasks.Event;
+import katsu.tasks.ToDo;
+import katsu.ui.UI;
+
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,7 +18,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Katsu {
-    public static final String NAME = "Katsu the Duck";
+    public static final String NAME = "katsu.Katsu the Duck";
     private boolean active;
     private CustomList list;
     private Storage storage;
@@ -62,7 +70,7 @@ public class Katsu {
     }
 
     public static void allCommands() {
-        System.out.println(UI.INDENT + "1. list / ls (to show all of your tasks)");
+        System.out.println(UI.INDENT + "1. list / ls (to show all of your katsu.tasks)");
         System.out.println(UI.INDENT + "2. bye (to end our chat)");
     }
 

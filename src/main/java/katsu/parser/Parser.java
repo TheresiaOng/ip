@@ -1,3 +1,7 @@
+package katsu.parser;
+import katsu.ui.UI;
+import katsu.Katsu;
+
 public class Parser {
     public static void handleCommand(String order, Katsu bot) {
         if (order.isEmpty()) {

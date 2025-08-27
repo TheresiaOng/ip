@@ -1,3 +1,6 @@
+package katsu.ui;
+import katsu.Katsu;
+
 public class UI {
     public static final String INDENT = "    ";
     public static final String SEPARATOR = INDENT + "____________________________________________________________";

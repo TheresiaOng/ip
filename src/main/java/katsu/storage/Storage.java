@@ -1,9 +1,17 @@
+package katsu.storage;
+import katsu.Katsu;
+import katsu.ui.UI;
+
+import katsu.tasks.CustomList;
+import katsu.tasks.Deadline;
+import katsu.tasks.Event;
+import katsu.tasks.ToDo;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Storage {
@@ -51,7 +59,7 @@ public class Storage {
     }
 
     public void save(CustomList data) throws java.io.IOException{
-        System.out.println(UI.INDENT + "Saving tasks...");
+        System.out.println(UI.INDENT + "Saving katsu.tasks...");
 
         File save = new File("data/katsuSave.txt");
         save.getParentFile().mkdirs();

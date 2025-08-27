@@ -1,3 +1,5 @@
+package katsu.tasks;
+
 public class Task {
     private String task;
 

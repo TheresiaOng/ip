@@ -11,17 +11,21 @@ public class CustomList {
         this.list = new ArrayList<>();
     }
 
-    public void add(Task task) {
-        this.list.add(task);
-        int size = this.list.size();
-
-        System.out.println(UI.INDENT + "Quack! I've added the task below to your list:");
-        System.out.println(UI.INDENT + "  " + task.printTask());
-
-        if (size == 1) {
-            System.out.println(UI.INDENT + "You now have 1 task in the list.");
+    public void add(Task task, boolean isQuiet) {
+        if (isQuiet) {
+            this.list.add(task);
         } else {
-            System.out.println(UI.INDENT + "You now have " + size + " katsu.tasks in the list.");
+            this.list.add(task);
+            int size = this.list.size();
+
+            System.out.println(UI.INDENT + "Quack! I've added the task below to your list:");
+            System.out.println(UI.INDENT + "  " + task.printTask());
+
+            if (size == 1) {
+                System.out.println(UI.INDENT + "You now have 1 task in the list.");
+            } else {
+                System.out.println(UI.INDENT + "You now have " + size + " katsu.tasks in the list.");
+            }
         }
     }
 
@@ -67,10 +71,29 @@ public class CustomList {
     public void printList() {
         int size = this.list.size();
 
-        System.out.println(UI.INDENT + "Here is all of your task, Quack!");
         for(int i = 0; i < size; i++) {
             int index = i + 1;
             System.out.println(UI.INDENT + index + "." + this.list.get(i).printTask());
+        }
+    }
+
+    public void hasKeyword(String word) {
+        int size = this.list.size();
+        CustomList newList = new CustomList();
+
+        for(int i = 0; i < size; i++) {
+            Task curr = this.list.get(i);
+
+            if(curr.hasKeyword(word)) {
+                newList.add(curr, true);
+            }
+        }
+
+        if(newList.isEmpty()) {
+            System.out.println(UI.INDENT + "Quack! No task description matches.");
+        } else {
+            System.out.println(UI.INDENT + "Quack! Here are the matching tasks in your list:");
+            newList.printList();
         }
     }
 

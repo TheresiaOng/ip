@@ -34,16 +34,16 @@ public class Storage {
 
             switch (taskDetails[0]) {
                 case "T":
-                    data.add(new ToDo(taskDetails[2]));
+                    data.add(new ToDo(taskDetails[2]), true);
                     break;
                 case "D":
                     LocalDateTime deadline = Katsu.stringToDateTimeConverter(taskDetails[3]);
-                    data.add(new Deadline(taskDetails[2], deadline));
+                    data.add(new Deadline(taskDetails[2], deadline), true);
                     break;
                 case "E":
                     LocalDate startTime = Katsu.stringToDateConverter(taskDetails[3]);
                     LocalDate endTime = Katsu.stringToDateConverter(taskDetails[4]);
-                    data.add(new Event(taskDetails[2], startTime, endTime));
+                    data.add(new Event(taskDetails[2], startTime, endTime), true);
                     break;
             }
 

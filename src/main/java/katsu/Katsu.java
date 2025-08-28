@@ -130,6 +130,7 @@ public class Katsu {
      **/
     public void printList() {
         if (!this.list.isEmpty()) {
+            System.out.println(UI.INDENT + "Here is all of your task, Quack!");
             this.list.printList();
         } else {
             System.out.println(UI.INDENT + "Quack! Your task list is empty.");
@@ -171,7 +172,7 @@ public class Katsu {
             return;
         }
 
-        this.list.add(new ToDo(newTask));
+        this.list.add(new ToDo(newTask), false);
     }
 
     /**
@@ -201,7 +202,7 @@ public class Katsu {
         newDeadline = String.join(" ", Arrays.copyOfRange(words, newTaskUntil + 1, words.length));
         LocalDateTime deadline = stringToDateTimeConverter(newDeadline);
 
-        this.list.add(new Deadline(newTask, deadline));
+        this.list.add(new Deadline(newTask, deadline), false);
     }
 
     /**
@@ -266,7 +267,7 @@ public class Katsu {
         LocalDate startTime = stringToDateConverter(newStartTime);
         LocalDate endTime = stringToDateConverter(newEndTime);
 
-        this.list.add(new Event(newTask, startTime, endTime));
+        this.list.add(new Event(newTask, startTime, endTime), false);
     }
 
     /**
@@ -308,6 +309,14 @@ public class Katsu {
             System.out.println(UI.INDENT + "⚠ Quack! That does not look like a number... •᷄ɞ•");
         } catch (IndexOutOfBoundsException e) {
             System.out.println(UI.INDENT + "⚠ Quack! You do not have that task number.");
+        }
+    }
+
+    public void handleFind(String[] words) {
+        try {
+            this.list.hasKeyword(words[1]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println(UI.INDENT + "⚠ Quack! What do you want to find?");
         }
     }
 }

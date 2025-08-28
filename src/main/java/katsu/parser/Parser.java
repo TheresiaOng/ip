@@ -42,6 +42,9 @@ public class Parser {
             case "event":
                 bot.addTask(words, Katsu.TaskType.EVENT);
                 break;
+            case "find":
+                bot.handleFind(words);
+                break;
             default:
                 System.out.println(UI.INDENT + "Quack! Sorry, I'm not sure what you meant... `•᷄ɞ•᷅");
         }

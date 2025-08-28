@@ -34,6 +34,10 @@ public class Task {
         return complete + " | " + this.task;
     }
 
+    public boolean hasKeyword(String word) {
+        return this.task.contains(word);
+    }
+
     @Override
     public String toString() {
         return this.task;

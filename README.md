@@ -1,26 +1,47 @@
-# Duke project template
+# Katsu
+> “Your mind is for having ideas, not holding them.” – David Allen [source](https://dansilvestre.com/productivity-quotes)
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
+Your pesonal assistant that lets you keep track of your daily and future tasks! 🚀
 
-## Setting up in Intellij
+**Katsu** is:
+* Text-based
+* Easy to learn
+* ~~Fast~~ *SUPER FAST* to use!
 
-Prerequisites: JDK 17, update Intellij to the most recent version.
+## Downloading Katsu
 
-1. Open Intellij (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project first)
-1. Open the project into Intellij as follows:
-   1. Click `Open`.
-   1. Select the project directory, and click `OK`.
-   1. If there are any further prompts, accept the defaults.
-1. Configure the project to use **JDK 17** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
-   In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/Duke.java` file, right-click it, and choose `Run Duke.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
+1. Download .jar file from [here](https://github.com/TheresiaOng/ip/releases/tag/A-Jar)
+2. Double-click it!
+3. Add your tasks
+4. Let it manage your tasks for you!
+
+## Features
+
+- [x] Managing tasks
+- [x] Managing deadlines
+- [x] Managing events
+- [ ] Reminders *(Coming soon)*
+
+## Preview of Katsu
    ```
-   Hello from
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
+    ____________________________________________________________
+     _  __     _
+    | |/ /__ _| |_ ___ _   _
+    | ' // _` | __/ __| | | |
+    | . \ (_| | |_\__ \ |_| |
+    |_|\_\__,_|\__|___/\__,_|
+
+    Hello! I'm Katsu the Duck ꒰ঌ( •ө• )໒꒱
+    What can I do for you?
+    ____________________________________________________________
    ```
 
-**Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+If you are a Java programmer, you can use it to practice Java too. Here's the ```main``` method:
+```Java
+public class Main {
+    public static void main(String[] args) {
+        Application.launch(MainApp.class, args);
+    }
+}
+```
+

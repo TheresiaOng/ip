@@ -1,13 +1,5 @@
 package katsu;
 
-import katsu.parser.Parser;
-import katsu.storage.Storage;
-import katsu.tasks.CustomList;
-import katsu.tasks.Deadline;
-import katsu.tasks.Event;
-import katsu.tasks.ToDo;
-import katsu.ui.UI;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -16,6 +8,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
+
+import katsu.parser.Parser;
+import katsu.storage.Storage;
+import katsu.tasks.CustomList;
+import katsu.tasks.Deadline;
+import katsu.tasks.Event;
+import katsu.tasks.ToDo;
+import katsu.ui.UI;
 
 /**
  * Main class for Katsu the Duck application.
@@ -30,19 +30,6 @@ public class Katsu {
     private UI ui;
 
     /**
-     * Starting point of the program.
-     * Creates a new <code>Katsu</code> object and run it.
-     */
-    public static void main(String[] args) {
-        Katsu katsu = new Katsu();
-        katsu.run();
-    }
-
-    public enum TaskType {
-        TODO, DEADLINE, EVENT
-    }
-
-    /**
      * Constructs a new <code>Katsu</code> object.
      * Initializes task list, storage, and UI components.
      * The application is initially inactive.
@@ -52,6 +39,27 @@ public class Katsu {
         this.list = new CustomList();
         this.storage = new Storage();
         this.ui = new UI();
+    }
+
+    /**
+     * Starting point of the program.
+     * Creates a new <code>Katsu</code> object and run it.
+     */
+    public static void main(String[] args) {
+        Katsu katsu = new Katsu();
+        katsu.run();
+    }
+
+    /**
+     * Represents the different types of tasks supported by the application.
+     *
+     * The available task types are:
+     * <code>TODO</code> - A simple task without any date/time constraints</li>
+     * <code>DEADLINE</code> - A task with a specific due date and time</li>
+     * <code>EVENT</code> - A task with a start and end date</li>
+     */
+    public enum TaskType {
+        TODO, DEADLINE, EVENT
     }
 
     /**
@@ -95,13 +103,13 @@ public class Katsu {
      * @param dateTimeString The date in "yyyy-MM-dd HH:mm" format.
      * @return <code>LocalDateTime</code> representing the input string.
      */
-    public static LocalDateTime stringToDateTimeConverter (String dateTimeString) {
+    public static LocalDateTime stringToDateTimeConverter(String dateTimeString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return LocalDateTime.parse(dateTimeString, formatter);
     }
 
     /**
-     * Prints all available commands to user.
+     * Prints all available commands to the user.
      */
     public static void allCommands() {
         System.out.println(UI.INDENT + "1. list / ls (to show all of your katsu.tasks)");
@@ -109,9 +117,8 @@ public class Katsu {
     }
 
     /**
-     * Deactivate the Katsu application.
-     * Saves tasks to storage, sets active as false, and prints
-     * "Quack. Hope to see you again soon!".
+     * Deactivates the Katsu application.
+     * Saves tasks to storage, sets active status to false, and prints farewell message.
      */
     public void deactivate() {
         try {
@@ -125,9 +132,9 @@ public class Katsu {
     }
 
     /**
-     * Print all task in the task list if not empty
-     * else will print "Quack! Your task list is empty.".
-     **/
+     * Prints all tasks in the task list if not empty,
+     * otherwise prints a message indicating the list is empty.
+     */
     public void printList() {
         if (!this.list.isEmpty()) {
             System.out.println(UI.INDENT + "Here is all of your task, Quack!");
@@ -146,15 +153,18 @@ public class Katsu {
      */
     public void addTask(String[] words, TaskType type) {
         switch (type) {
-            case TODO:
-                this.addToDo(words);
-                break;
-            case DEADLINE:
-                this.addDeadline(words);
-                break;
-            case EVENT:
-                this.addEvent(words);
-                break;
+        case TODO:
+            this.addToDo(words);
+            break;
+        case DEADLINE:
+            this.addDeadline(words);
+            break;
+        case EVENT:
+            this.addEvent(words);
+            break;
+        default:
+            System.out.println(UI.INDENT + "⚠ Unknown task type: " + type);
+            break;
         }
     }
 
@@ -181,7 +191,8 @@ public class Katsu {
      * @param words Array of user input words for the task.
      */
     public void addDeadline(String[] words) {
-        String newTask, newDeadline;
+        String newTask;
+        String newDeadline;
         int newTaskUntil = Parser.findWord(words, "/by", -1);
 
         newTask = (newTaskUntil == -1)
@@ -211,7 +222,9 @@ public class Katsu {
      * @param words Array of user input words for the task.
      */
     public void addEvent(String[] words) {
-        String newTask, newStartTime, newEndTime;
+        String newTask;
+        String newStartTime;
+        String newEndTime;
 
         int newTaskUntil = Parser.findWord(words, "/from", -1);
 
@@ -312,6 +325,11 @@ public class Katsu {
         }
     }
 
+    /**
+     * Handles searching for tasks containing a specific keyword.
+     *
+     * @param words array of user input words containing the search keyword
+     */
     public void handleFind(String[] words) {
         try {
             this.list.hasKeyword(words[1]);

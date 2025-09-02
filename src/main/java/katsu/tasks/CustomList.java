@@ -1,16 +1,30 @@
 package katsu.tasks;
-import katsu.ui.UI;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import katsu.ui.UI;
+
+/**
+ * Represents a custom list implementation for managing Task objects.
+ * Provides functionality to add, remove, mark, and search tasks with user feedback.
+ */
 public class CustomList {
     private List<Task> list;
 
+    /**
+     * Constructs a new empty <code>CustomList</code>.
+     */
     public CustomList() {
         this.list = new ArrayList<>();
     }
 
+    /**
+     * Adds a task to the list with optional user feedback.
+     *
+     * @param task the task to be added to the list
+     * @param isQuiet if true, suppresses user feedback messages; if false, displays addition confirmation
+     */
     public void add(Task task, boolean isQuiet) {
         if (isQuiet) {
             this.list.add(task);
@@ -29,6 +43,11 @@ public class CustomList {
         }
     }
 
+    /**
+     * Marks a task as completed based on its position in the list.
+     *
+     * @param num the string representation of the task number (1-based index)
+     */
     public void markCompleted(String num) {
         int index = Integer.parseInt(num) - 1;
 
@@ -39,6 +58,11 @@ public class CustomList {
         System.out.println(UI.INDENT + "  " + currTask.printTask());
     }
 
+    /**
+     * Marks a task as uncompleted based on its position in the list.
+     *
+     * @param num the string representation of the task number (1-based index)
+     */
     public void markUncompleted(String num) {
         int index = Integer.parseInt(num) - 1;
 
@@ -49,6 +73,11 @@ public class CustomList {
         System.out.println(UI.INDENT + "  " + currTask.printTask());
     }
 
+    /**
+     * Removes a task from the list based on its position and provides user feedback.
+     *
+     * @param num the string representation of the task number (1-based index)
+     */
     public void deleteTask(String num) {
         int index = Integer.parseInt(num) - 1;
 
@@ -61,35 +90,43 @@ public class CustomList {
 
         if (size == 0) {
             System.out.println(UI.INDENT + "You have no more task in the list.");
-        } else if (size == 1){
+        } else if (size == 1) {
             System.out.println(UI.INDENT + "You now have 1 task in the list.");
         } else {
             System.out.println(UI.INDENT + "You now have " + size + " katsu.tasks in the list.");
         }
     }
 
+    /**
+     * Displays all tasks in the list with their numbering and completion status.
+     */
     public void printList() {
         int size = this.list.size();
 
-        for(int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             int index = i + 1;
             System.out.println(UI.INDENT + index + "." + this.list.get(i).printTask());
         }
     }
 
+    /**
+     * Searches for tasks containing a specific keyword and displays matching results.
+     *
+     * @param word the keyword to search for in task descriptions
+     */
     public void hasKeyword(String word) {
         int size = this.list.size();
         CustomList newList = new CustomList();
 
-        for(int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             Task curr = this.list.get(i);
 
-            if(curr.hasKeyword(word)) {
+            if (curr.hasKeyword(word)) {
                 newList.add(curr, true);
             }
         }
 
-        if(newList.isEmpty()) {
+        if (newList.isEmpty()) {
             System.out.println(UI.INDENT + "Quack! No task description matches.");
         } else {
             System.out.println(UI.INDENT + "Quack! Here are the matching tasks in your list:");
@@ -97,14 +134,30 @@ public class CustomList {
         }
     }
 
+    /**
+     * Returns the formatted save string for a specific task in the list.
+     *
+     * @param index the index of the task to format (0-based index)
+     * @return the formatted string representation of the task for storage
+     */
     public String formatSave(int index) {
         return this.list.get(index).formatSave();
     }
 
+    /**
+     * Checks if the list is empty.
+     *
+     * @return true if the list contains no tasks, false otherwise
+     */
     public boolean isEmpty() {
         return this.list.isEmpty();
     }
 
+    /**
+     * Returns the number of tasks in the list.
+     *
+     * @return the number of tasks in the list
+     */
     public int size() {
         return this.list.size();
     }

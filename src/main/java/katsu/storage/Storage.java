@@ -3,6 +3,7 @@ package katsu.storage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Scanner;
@@ -12,7 +13,7 @@ import katsu.tasks.CustomList;
 import katsu.tasks.Deadline;
 import katsu.tasks.Event;
 import katsu.tasks.ToDo;
-import katsu.ui.UI;
+import katsu.ui.Ui;
 
 /**
  * Handles loading and saving of task data to persistent storage.
@@ -35,11 +36,11 @@ public class Storage {
      * @throws FileNotFoundException if the save file does not exist
      */
     public CustomList loadSave() throws FileNotFoundException {
-        System.out.println(UI.INDENT + "Loading save file...");
+        System.out.println(Ui.INDENT + "Loading save file...");
 
         File save = new File(this.path);
         Scanner scanner = new Scanner(save);
-        CustomList data = new CustomList();
+        CustomList tasks = new CustomList();
         int index = 0;
 
         while (scanner.hasNext()) {
@@ -48,31 +49,31 @@ public class Storage {
 
             switch (taskDetails[0]) {
             case "T":
-                data.add(new ToDo(taskDetails[2]), true);
+                tasks.add(new ToDo(taskDetails[2]), true);
                 break;
             case "D":
-                LocalDateTime deadline = Katsu.stringToDateTimeConverter(taskDetails[3]);
-                data.add(new Deadline(taskDetails[2], deadline), true);
+                LocalDateTime dueDate = Katsu.convertStringToDateTime(taskDetails[3]);
+                tasks.add(new Deadline(taskDetails[2], dueDate), true);
                 break;
             case "E":
-                LocalDate startTime = Katsu.stringToDateConverter(taskDetails[3]);
-                LocalDate endTime = Katsu.stringToDateConverter(taskDetails[4]);
-                data.add(new Event(taskDetails[2], startTime, endTime), true);
+                LocalDate startDate = Katsu.convertStringToDate(taskDetails[3]);
+                LocalDate endDate = Katsu.convertStringToDate(taskDetails[4]);
+                tasks.add(new Event(taskDetails[2], startDate, endDate), true);
                 break;
             default:
-                System.out.println(UI.INDENT + "⚠ Unknown task type in save file: " + taskDetails[0]);
+                System.out.println(Ui.INDENT + "⚠ Unknown task type in save file: " + taskDetails[0]);
                 break;
             }
 
             if (taskDetails[1].equals("1")) {
-                data.markCompleted(String.valueOf(index + 1));
+                tasks.markCompleted(String.valueOf(index + 1));
             }
 
             index++;
         }
 
-        System.out.println(UI.INDENT + "Save file loaded.");
-        return data;
+        System.out.println(Ui.INDENT + "Save file loaded.");
+        return tasks;
     }
 
     /**
@@ -81,22 +82,22 @@ public class Storage {
      * @param data the CustomList containing tasks to be saved
      * @throws java.io.IOException if an I/O error occurs during file writing
      */
-    public void save(CustomList data) throws java.io.IOException {
-        System.out.println(UI.INDENT + "Saving katsu.tasks...");
+    public void save(CustomList data) throws IOException {
+        System.out.println(Ui.INDENT + "Saving katsu.tasks...");
 
         File save = new File("data/katsuSave.txt");
         save.getParentFile().mkdirs();
         FileWriter fw = new FileWriter(save);
         int size = data.size();
-        StringBuilder taskdetails = new StringBuilder();
+        StringBuilder taskDetails = new StringBuilder();
 
         for (int i = 0; i < size; i++) {
-            taskdetails.append(data.formatSave(i));
-            taskdetails.append("\n");
+            taskDetails.append(data.formatSave(i));
+            taskDetails.append("\n");
         }
 
-        fw.write(taskdetails.toString());
+        fw.write(taskDetails.toString());
         fw.close();
-        System.out.println(UI.INDENT + "Saved successfully.");
+        System.out.println(Ui.INDENT + "Saved successfully.");
     }
 }

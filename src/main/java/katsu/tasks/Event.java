@@ -9,20 +9,20 @@ import java.time.format.DateTimeFormatter;
  */
 public class Event extends Task {
     private static final String label = "[E]";
-    private LocalDate startTime;
-    private LocalDate endTime;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     /**
      * Constructs a new <code>Event</code> object.
      *
      * @param task the description of the event task
-     * @param startTime the starting time of the event
-     * @param endTime the end time of the event
+     * @param startDate the starting time of the event
+     * @param endDate the end time of the event
      */
-    public Event(String task, LocalDate startTime, LocalDate endTime) {
+    public Event(String task, LocalDate startDate, LocalDate endDate) {
         super(task);
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     /**
@@ -32,7 +32,7 @@ public class Event extends Task {
      * @param date the <code>LocalDate</code> object to format
      * @return a formatted string representation of the date
      */
-    public String dateToString(LocalDate date) {
+    public String convertDateToString(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
         return date.format(formatter);
     }
@@ -43,9 +43,10 @@ public class Event extends Task {
      *
      * @return a formatted string showing the event task details
      */
+    @Override
     public String printTask() {
-        return label + super.printTask() + " (from: " + this.dateToString(startTime)
-                + " to: " + this.dateToString(endTime) + ")";
+        return label + super.printTask() + " (from: " + this.convertDateToString(startDate)
+                + " to: " + this.convertDateToString(endDate) + ")";
     }
 
     /**
@@ -54,7 +55,8 @@ public class Event extends Task {
      *
      * @return a string in the format "E | completion_status | task_description | start_date | end_date"
      */
+    @Override
     public String formatSave() {
-        return "E | " + super.formatSave() + " | " + this.startTime + " | " + this.endTime;
+        return "E | " + super.formatSave() + " | " + this.startDate + " | " + this.endDate;
     }
 }

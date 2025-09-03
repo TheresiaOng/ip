@@ -15,7 +15,7 @@ import katsu.tasks.CustomList;
 import katsu.tasks.Deadline;
 import katsu.tasks.Event;
 import katsu.tasks.ToDo;
-import katsu.ui.UI;
+import katsu.ui.Ui;
 
 /**
  * Main class for Katsu the Duck application.
@@ -24,21 +24,22 @@ import katsu.ui.UI;
  */
 public class Katsu {
     public static final String NAME = "Katsu the Duck";
+
     private boolean active;
-    private CustomList list;
+    private CustomList tasks;
     private Storage storage;
-    private UI ui;
+    private Ui ui;
 
     /**
      * Constructs a new <code>Katsu</code> object.
-     * Initializes task list, storage, and UI components.
+     * Initializes task tasks, storage, and Ui components.
      * The application is initially inactive.
      */
     public Katsu() {
         this.active = false;
-        this.list = new CustomList();
+        this.tasks = new CustomList();
         this.storage = new Storage();
-        this.ui = new UI();
+        this.ui = new Ui();
     }
 
     /**
@@ -70,14 +71,14 @@ public class Katsu {
     public void run() {
         this.active = true;
         try {
-            this.list = this.storage.loadSave();
+            this.tasks = this.storage.loadSave();
         } catch (FileNotFoundException e) {
-            System.out.println(UI.INDENT + "No save file found.");
+            System.out.println(Ui.INDENT + "No save file found.");
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println(UI.INDENT + "Wrong task format in save file.");
+            System.out.println(Ui.INDENT + "Wrong task format in save file.");
         }
 
-        this.ui.startingText();
+        this.ui.printStartingText();
         Scanner scanner = new Scanner(System.in);
 
         while (this.active) {
@@ -92,7 +93,7 @@ public class Katsu {
      * @param dateString The date in "yyyy-MM-dd" format.
      * @return <code>LocalDate</code> representing the input string.
      */
-    public static LocalDate stringToDateConverter(String dateString) {
+    public static LocalDate convertStringToDate(String dateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDate.parse(dateString, formatter);
     }
@@ -103,7 +104,7 @@ public class Katsu {
      * @param dateTimeString The date in "yyyy-MM-dd HH:mm" format.
      * @return <code>LocalDateTime</code> representing the input string.
      */
-    public static LocalDateTime stringToDateTimeConverter(String dateTimeString) {
+    public static LocalDateTime convertStringToDateTime(String dateTimeString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return LocalDateTime.parse(dateTimeString, formatter);
     }
@@ -111,9 +112,9 @@ public class Katsu {
     /**
      * Prints all available commands to the user.
      */
-    public static void allCommands() {
-        System.out.println(UI.INDENT + "1. list / ls (to show all of your katsu.tasks)");
-        System.out.println(UI.INDENT + "2. bye (to end our chat)");
+    public static void printAllCommands() {
+        System.out.println(Ui.INDENT + "1. tasks / ls (to show all of your katsu.tasks)");
+        System.out.println(Ui.INDENT + "2. bye (to end our chat)");
     }
 
     /**
@@ -122,30 +123,30 @@ public class Katsu {
      */
     public void deactivate() {
         try {
-            this.storage.save(this.list);
+            this.storage.save(this.tasks);
         } catch (IOException e) {
-            System.out.println(UI.INDENT + "Error while saving file.");
+            System.out.println(Ui.INDENT + "Error while saving file.");
         }
 
         this.active = false;
-        System.out.println(UI.INDENT + "Quack. Hope to see you again soon!");
+        System.out.println(Ui.INDENT + "Quack. Hope to see you again soon!");
     }
 
     /**
-     * Prints all tasks in the task list if not empty,
-     * otherwise prints a message indicating the list is empty.
+     * Prints all tasks in the task tasks if not empty,
+     * otherwise prints a message indicating the tasks is empty.
      */
     public void printList() {
-        if (!this.list.isEmpty()) {
-            System.out.println(UI.INDENT + "Here is all of your task, Quack!");
-            this.list.printList();
+        if (!this.tasks.isEmpty()) {
+            System.out.println(Ui.INDENT + "Here is all of your task, Quack!");
+            this.tasks.printList();
         } else {
-            System.out.println(UI.INDENT + "Quack! Your task list is empty.");
+            System.out.println(Ui.INDENT + "Quack! Your task list is empty.");
         }
     }
 
     /**
-     * Adds a task to the task list.
+     * Adds a task to the task tasks.
      * The type of task is determined by the <code>TaskType</code> parameter.
      *
      * @param words Array of user input words for the task.
@@ -163,13 +164,13 @@ public class Katsu {
             this.addEvent(words);
             break;
         default:
-            System.out.println(UI.INDENT + "⚠ Unknown task type: " + type);
+            System.out.println(Ui.INDENT + "⚠ Unknown task type: " + type);
             break;
         }
     }
 
     /**
-     * Adds a task of type TODO to the task list.
+     * Adds a task of type TODO to the task tasks.
      *
      * @param words Array of user input words for the task.
      */
@@ -178,46 +179,46 @@ public class Katsu {
         String newTask = String.join(" ", Arrays.stream(words).skip(1).toArray(String[]::new));
 
         if (newTask.isEmpty()) {
-            System.out.println(UI.INDENT + "⚠ Quack! You're missing the todo's description.");
+            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the todo's description.");
             return;
         }
 
-        this.list.add(new ToDo(newTask), false);
+        this.tasks.add(new ToDo(newTask), false);
     }
 
     /**
-     * Adds a task of type DEADLINE to the task list.
+     * Adds a task of type DEADLINE to the task tasks.
      *
      * @param words Array of user input words for the task.
      */
     public void addDeadline(String[] words) {
         String newTask;
         String newDeadline;
-        int newTaskUntil = Parser.findWord(words, "/by", -1);
+        int byPosition = Parser.findWord(words, "/by", -1);
 
-        newTask = (newTaskUntil == -1)
+        newTask = (byPosition == -1)
                 ? String.join(" ", Arrays.copyOfRange(words, 1, words.length))
-                : String.join(" ", Arrays.copyOfRange(words, 1, newTaskUntil));
+                : String.join(" ", Arrays.copyOfRange(words, 1, byPosition));
 
         if (newTask.isEmpty()) {
-            System.out.println(UI.INDENT + "⚠ Quack! You're missing the deadline's description.");
+            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the deadline's description.");
             return;
         }
 
-        if (newTaskUntil == -1 || newTaskUntil + 1 >= words.length) {
-            System.out.println(UI.INDENT + "⚠ Quack! You're missing the deadline.");
-            System.out.println(UI.INDENT + "(use '/by' followed by the deadline).");
+        if (byPosition == -1 || byPosition + 1 >= words.length) {
+            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the deadline.");
+            System.out.println(Ui.INDENT + "(use '/by' followed by the deadline).");
             return;
         }
 
-        newDeadline = String.join(" ", Arrays.copyOfRange(words, newTaskUntil + 1, words.length));
-        LocalDateTime deadline = stringToDateTimeConverter(newDeadline);
+        newDeadline = String.join(" ", Arrays.copyOfRange(words, byPosition + 1, words.length));
+        LocalDateTime deadline = convertStringToDateTime(newDeadline);
 
-        this.list.add(new Deadline(newTask, deadline), false);
+        this.tasks.add(new Deadline(newTask, deadline), false);
     }
 
     /**
-     * Adds a task of type EVENT to the task list.
+     * Adds a task of type EVENT to the task tasks.
      *
      * @param words Array of user input words for the task.
      */
@@ -226,65 +227,65 @@ public class Katsu {
         String newStartTime;
         String newEndTime;
 
-        int newTaskUntil = Parser.findWord(words, "/from", -1);
+        int fromPosition = Parser.findWord(words, "/from", -1);
 
-        newTask = (newTaskUntil == -1)
+        newTask = (fromPosition == -1)
                 ? String.join(" ", Arrays.copyOfRange(words, 1, words.length))
-                : String.join(" ", Arrays.copyOfRange(words, 1, newTaskUntil));
+                : String.join(" ", Arrays.copyOfRange(words, 1, fromPosition));
 
         if (newTask.isEmpty()) {
-            System.out.println(UI.INDENT + "⚠ Quack! You're missing the event's description.");
+            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the event's description.");
             return;
         }
 
-        if (newTaskUntil == -1) {
-            System.out.println(UI.INDENT + "⚠ Quack! You're missing the event's starting time.");
-            System.out.println(UI.INDENT + "(use '/from' followed by the start time).");
+        if (fromPosition == -1) {
+            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the event's starting time.");
+            System.out.println(Ui.INDENT + "(use '/from' followed by the start time).");
             return;
         }
 
-        int newStartUntil;
+        int toPosition;
 
-        if (newTaskUntil + 1 < words.length) {
-            newStartUntil = Parser.findWord(words, "/to", newTaskUntil + 1);
+        if (fromPosition + 1 < words.length) {
+            toPosition = Parser.findWord(words, "/to", fromPosition + 1);
 
-            newStartTime = (newStartUntil == -1)
-                    ? String.join(" ", Arrays.copyOfRange(words, newTaskUntil + 1, words.length))
-                    : String.join(" ", Arrays.copyOfRange(words, newTaskUntil + 1, newStartUntil));
+            newStartTime = (toPosition == -1)
+                    ? String.join(" ", Arrays.copyOfRange(words, fromPosition + 1, words.length))
+                    : String.join(" ", Arrays.copyOfRange(words, fromPosition + 1, toPosition));
 
             if (newStartTime.isEmpty()) {
-                System.out.println(UI.INDENT + "⚠ Quack! You're missing the event's starting time.");
-                System.out.println(UI.INDENT + "(use '/from' followed by the start time).");
+                System.out.println(Ui.INDENT + "⚠ Quack! You're missing the event's starting time.");
+                System.out.println(Ui.INDENT + "(use '/from' followed by the start time).");
                 return;
             }
 
-            if (newStartUntil == -1) {
-                System.out.println(UI.INDENT + "⚠ Quack! You're missing the event's ending time.");
-                System.out.println(UI.INDENT + "(use '/to' followed by the end time).");
+            if (toPosition == -1) {
+                System.out.println(Ui.INDENT + "⚠ Quack! You're missing the event's ending time.");
+                System.out.println(Ui.INDENT + "(use '/to' followed by the end time).");
                 return;
             }
         } else {
-            System.out.println(UI.INDENT + "⚠ Quack! You're missing the event's starting time.");
-            System.out.println(UI.INDENT + "(use '/from' followed by the start time).");
+            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the event's starting time.");
+            System.out.println(Ui.INDENT + "(use '/from' followed by the start time).");
             return;
         }
 
-        if (newStartUntil + 1 < words.length) {
-            newEndTime = String.join(" ", Arrays.copyOfRange(words, newStartUntil + 1, words.length));
+        if (toPosition + 1 < words.length) {
+            newEndTime = String.join(" ", Arrays.copyOfRange(words, toPosition + 1, words.length));
         } else {
-            System.out.println(UI.INDENT + "⚠ Quack! You're missing the event's ending time.");
-            System.out.println(UI.INDENT + "(use '/to' followed by the end time).");
+            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the event's ending time.");
+            System.out.println(Ui.INDENT + "(use '/to' followed by the end time).");
             return;
         }
 
-        LocalDate startTime = stringToDateConverter(newStartTime);
-        LocalDate endTime = stringToDateConverter(newEndTime);
+        LocalDate startDate = convertStringToDate(newStartTime);
+        LocalDate endDate = convertStringToDate(newEndTime);
 
-        this.list.add(new Event(newTask, startTime, endTime), false);
+        this.tasks.add(new Event(newTask, startDate, endDate), false);
     }
 
     /**
-     * Handle marking task in the task list.
+     * Handle marking task in the task tasks.
      * Either mark or unmark the task as done.
      *
      * @param command Either "mark" or "unmark".
@@ -294,34 +295,34 @@ public class Katsu {
         try {
             String taskNum = words[1];
             if (Objects.equals(command, "mark")) {
-                this.list.markCompleted(taskNum);
+                this.tasks.markCompleted(taskNum);
             } else {
-                this.list.markUncompleted(taskNum);
+                this.tasks.markUncompleted(taskNum);
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println(UI.INDENT + "⚠ Quack! You forgot the task number.");
+            System.out.println(Ui.INDENT + "⚠ Quack! You forgot the task number.");
         } catch (NumberFormatException e) {
-            System.out.println(UI.INDENT + "⚠ Quack! That does not look like a number... •᷄ɞ•");
+            System.out.println(Ui.INDENT + "⚠ Quack! That does not look like a number... •᷄ɞ•");
         } catch (IndexOutOfBoundsException e) {
-            System.out.println(UI.INDENT + "⚠ Quack! You do not have that task number.");
+            System.out.println(Ui.INDENT + "⚠ Quack! You do not have that task number.");
         }
     }
 
     /**
-     * Handle deletion of task in the task list.
+     * Handle deletion of task in the task tasks.
      *
      * @param words Array of user input words for the task.
      */
     public void handleDelete(String[] words) {
         try {
             String taskNum = words[1];
-            this.list.deleteTask(taskNum);
+            this.tasks.deleteTask(taskNum);
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println(UI.INDENT + "⚠ Quack! You forgot the task number.");
+            System.out.println(Ui.INDENT + "⚠ Quack! You forgot the task number.");
         } catch (NumberFormatException e) {
-            System.out.println(UI.INDENT + "⚠ Quack! That does not look like a number... •᷄ɞ•");
+            System.out.println(Ui.INDENT + "⚠ Quack! That does not look like a number... •᷄ɞ•");
         } catch (IndexOutOfBoundsException e) {
-            System.out.println(UI.INDENT + "⚠ Quack! You do not have that task number.");
+            System.out.println(Ui.INDENT + "⚠ Quack! You do not have that task number.");
         }
     }
 
@@ -332,9 +333,9 @@ public class Katsu {
      */
     public void handleFind(String[] words) {
         try {
-            this.list.hasKeyword(words[1]);
+            this.tasks.findKeyword(words[1]);
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println(UI.INDENT + "⚠ Quack! What do you want to find?");
+            System.out.println(Ui.INDENT + "⚠ Quack! What do you want to find?");
         }
     }
 }

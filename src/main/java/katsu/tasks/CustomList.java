@@ -3,7 +3,7 @@ package katsu.tasks;
 import java.util.ArrayList;
 import java.util.List;
 
-import katsu.ui.UI;
+import katsu.ui.Ui;
 
 /**
  * Represents a custom list implementation for managing Task objects.
@@ -32,13 +32,13 @@ public class CustomList {
             this.list.add(task);
             int size = this.list.size();
 
-            System.out.println(UI.INDENT + "Quack! I've added the task below to your list:");
-            System.out.println(UI.INDENT + "  " + task.printTask());
+            System.out.println(Ui.INDENT + "Quack! I've added the task below to your list:");
+            System.out.println(Ui.INDENT + "  " + task.printTask());
 
             if (size == 1) {
-                System.out.println(UI.INDENT + "You now have 1 task in the list.");
+                System.out.println(Ui.INDENT + "You now have 1 task in the list.");
             } else {
-                System.out.println(UI.INDENT + "You now have " + size + " katsu.tasks in the list.");
+                System.out.println(Ui.INDENT + "You now have " + size + " katsu.tasks in the list.");
             }
         }
     }
@@ -46,54 +46,54 @@ public class CustomList {
     /**
      * Marks a task as completed based on its position in the list.
      *
-     * @param num the string representation of the task number (1-based index)
+     * @param id the string representation of the task number (1-based index)
      */
-    public void markCompleted(String num) {
-        int index = Integer.parseInt(num) - 1;
+    public void markCompleted(String id) {
+        int index = Integer.parseInt(id) - 1;
 
         Task currTask = this.list.get(index);
         currTask.markCompleted();
 
-        System.out.println(UI.INDENT + "Quack! I have  marked this task as done:");
-        System.out.println(UI.INDENT + "  " + currTask.printTask());
+        System.out.println(Ui.INDENT + "Quack! I have  marked this task as done:");
+        System.out.println(Ui.INDENT + "  " + currTask.printTask());
     }
 
     /**
      * Marks a task as uncompleted based on its position in the list.
      *
-     * @param num the string representation of the task number (1-based index)
+     * @param id the string representation of the task number (1-based index)
      */
-    public void markUncompleted(String num) {
-        int index = Integer.parseInt(num) - 1;
+    public void markUncompleted(String id) {
+        int index = Integer.parseInt(id) - 1;
 
         Task currTask = this.list.get(index);
         currTask.markUncompleted();
 
-        System.out.println(UI.INDENT + "Quack! I have  marked this task as not done yet:");
-        System.out.println(UI.INDENT + "  " + currTask.printTask());
+        System.out.println(Ui.INDENT + "Quack! I have  marked this task as not done yet:");
+        System.out.println(Ui.INDENT + "  " + currTask.printTask());
     }
 
     /**
      * Removes a task from the list based on its position and provides user feedback.
      *
-     * @param num the string representation of the task number (1-based index)
+     * @param id the string representation of the task number (1-based index)
      */
-    public void deleteTask(String num) {
-        int index = Integer.parseInt(num) - 1;
+    public void deleteTask(String id) {
+        int index = Integer.parseInt(id) - 1;
 
         Task currTask = this.list.get(index);
         this.list.remove(index);
         int size = this.list.size();
 
-        System.out.println(UI.INDENT + "Quack! I've removed the task below from your list:");
-        System.out.println(UI.INDENT + "  " + currTask.printTask());
+        System.out.println(Ui.INDENT + "Quack! I've removed the task below from your list:");
+        System.out.println(Ui.INDENT + "  " + currTask.printTask());
 
         if (size == 0) {
-            System.out.println(UI.INDENT + "You have no more task in the list.");
+            System.out.println(Ui.INDENT + "You have no more task in the list.");
         } else if (size == 1) {
-            System.out.println(UI.INDENT + "You now have 1 task in the list.");
+            System.out.println(Ui.INDENT + "You now have 1 task in the list.");
         } else {
-            System.out.println(UI.INDENT + "You now have " + size + " katsu.tasks in the list.");
+            System.out.println(Ui.INDENT + "You now have " + size + " tasks in the list.");
         }
     }
 
@@ -105,7 +105,7 @@ public class CustomList {
 
         for (int i = 0; i < size; i++) {
             int index = i + 1;
-            System.out.println(UI.INDENT + index + "." + this.list.get(i).printTask());
+            System.out.println(Ui.INDENT + index + "." + this.list.get(i).printTask());
         }
     }
 
@@ -114,7 +114,7 @@ public class CustomList {
      *
      * @param word the keyword to search for in task descriptions
      */
-    public void hasKeyword(String word) {
+    public void findKeyword(String word) {
         int size = this.list.size();
         CustomList newList = new CustomList();
 
@@ -127,9 +127,9 @@ public class CustomList {
         }
 
         if (newList.isEmpty()) {
-            System.out.println(UI.INDENT + "Quack! No task description matches.");
+            System.out.println(Ui.INDENT + "Quack! No task description matches.");
         } else {
-            System.out.println(UI.INDENT + "Quack! Here are the matching tasks in your list:");
+            System.out.println(Ui.INDENT + "Quack! Here are the matching tasks in your list:");
             newList.printList();
         }
     }

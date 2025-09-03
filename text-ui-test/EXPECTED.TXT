@@ -148,7 +148,7 @@
     ____________________________________________________________
     Quack! I've removed the task below from your list:
       [E][ ] party (from: Dec 05 2025 to: Dec 06 2025)
-    You now have 2 katsu.tasks in the list.
+    You now have 2 tasks in the list.
     ____________________________________________________________
 
     ____________________________________________________________

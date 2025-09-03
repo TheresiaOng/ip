@@ -1,7 +1,7 @@
 package katsu.parser;
 
 import katsu.Katsu;
-import katsu.ui.UI;
+import katsu.ui.Ui;
 
 /**
  * Handles parsing and processing of user commands for the Katsu application.
@@ -17,32 +17,29 @@ public class Parser {
      */
     public static void handleCommand(String order, Katsu bot) {
         if (order.isEmpty()) {
-            System.out.println(UI.SEPARATOR);
-            System.out.println(UI.INDENT + "Quack! You need to write something!\n");
-            System.out.println(UI.INDENT + "Here is some commands to help you:");
-            Katsu.allCommands();
-            System.out.println(UI.SEPARATOR + "\n");
+            System.out.println(Ui.SEPARATOR);
+            System.out.println(Ui.INDENT + "Quack! You need to write something!\n");
+            System.out.println(Ui.INDENT + "Here is some commands to help you:");
+            Katsu.printAllCommands();
+            System.out.println(Ui.SEPARATOR + "\n");
             return;
         }
 
         // split words by empty space
         String[] words = order.split(" ");
-        System.out.println(UI.SEPARATOR);
+        System.out.println(Ui.SEPARATOR);
 
         switch (words[0]) {
         case "bye":
             bot.deactivate();
             break;
-        case "list":
-        case "ls":
+        case "list", "ls":
             bot.printList();
             break;
-        case "delete":
-        case "del":
+        case "delete", "del":
             bot.handleDelete(words);
             break;
-        case "mark":
-        case "unmark":
+        case "mark", "unmark":
             bot.handleMarking(words[0], words);
             break;
         case "todo":
@@ -58,10 +55,10 @@ public class Parser {
             bot.handleFind(words);
             break;
         default:
-            System.out.println(UI.INDENT + "Quack! Sorry, I'm not sure what you meant... `•᷄ɞ•᷅");
+            System.out.println(Ui.INDENT + "Quack! Sorry, I'm not sure what you meant... `•᷄ɞ•᷅");
         }
 
-        System.out.println(UI.SEPARATOR + "\n");
+        System.out.println(Ui.SEPARATOR + "\n");
     }
 
     /**

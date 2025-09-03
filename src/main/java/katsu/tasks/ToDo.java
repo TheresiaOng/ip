@@ -22,6 +22,7 @@ public class ToDo extends Task {
      *
      * @return a formatted string showing the todo task details
      */
+    @Override
     public String printTask() {
         return label + super.printTask();
     }
@@ -32,6 +33,7 @@ public class ToDo extends Task {
      *
      * @return a string in the format "T | completion_status | task_description"
      */
+    @Override
     public String formatSave() {
         return "T | " + super.formatSave();
     }

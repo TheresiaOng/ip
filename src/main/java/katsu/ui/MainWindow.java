@@ -1,5 +1,6 @@
 package katsu.ui;
 
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -7,6 +8,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 import katsu.Katsu;
 import katsu.parser.Parser;
 
@@ -43,11 +46,20 @@ public class MainWindow extends AnchorPane {
         String input = userInput.getText();
         String katsuResponse = Parser.handleCommandTest(input, katsu);
 
+        if (katsuResponse.equalsIgnoreCase("exit_application")) {
+            deactive();
+        }
+
         DialogBox userDialog = DialogBox.getUserDialog(input, userImage);
         DialogBox katsuDialog = DialogBox.getKatsuDialog(katsuResponse, katsuImage);
 
         dialogContainer.getChildren().addAll(userDialog, katsuDialog);
 
         userInput.clear();
+    }
+
+    private void deactive() {
+        Stage stage = (Stage) sendButton.getScene().getWindow();
+        stage.close();
     }
 }

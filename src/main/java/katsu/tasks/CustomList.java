@@ -35,7 +35,7 @@ public class CustomList {
             StringBuilder katsuResponse = new StringBuilder();
 
             katsuResponse.append("Quack! I've added the task below to your list:\n");
-            katsuResponse.append(task.printTask());
+            katsuResponse.append(task.printTask()).append("\n");
 
             if (size == 1) {
                 katsuResponse.append("You now have 1 task in the list.");
@@ -52,14 +52,16 @@ public class CustomList {
      *
      * @param id the string representation of the task number (1-based index)
      */
-    public void markCompleted(String id) {
+    public String markCompleted(String id) {
         int index = Integer.parseInt(id) - 1;
+        StringBuilder response = new StringBuilder();
 
         Task currTask = this.list.get(index);
         currTask.markCompleted();
 
-        System.out.println(Ui.INDENT + "Quack! I have  marked this task as done:");
-        System.out.println(Ui.INDENT + "  " + currTask.printTask());
+        response.append("Quack! I have  marked this task as done:\n");
+        response.append(currTask.printTask());
+        return response.toString();
     }
 
     /**
@@ -67,14 +69,16 @@ public class CustomList {
      *
      * @param id the string representation of the task number (1-based index)
      */
-    public void markUncompleted(String id) {
+    public String markUncompleted(String id) {
         int index = Integer.parseInt(id) - 1;
+        StringBuilder response = new StringBuilder();
 
         Task currTask = this.list.get(index);
         currTask.markUncompleted();
 
-        System.out.println(Ui.INDENT + "Quack! I have  marked this task as not done yet:");
-        System.out.println(Ui.INDENT + "  " + currTask.printTask());
+        response.append("Quack! I have  marked this task as not done yet:\n");
+        response.append(currTask.printTask());
+        return response.toString();
     }
 
     /**
@@ -110,7 +114,7 @@ public class CustomList {
 
         for (int i = 0; i < size; i++) {
             int index = i + 1;
-            allTasksInList.append(index).append(".").append(this.list.get(i).printTask());
+            allTasksInList.append(index).append(". ").append(this.list.get(i).printTask()).append("\n");
         }
 
         return allTasksInList.toString();
@@ -121,9 +125,10 @@ public class CustomList {
      *
      * @param word the keyword to search for in task descriptions
      */
-    public void findKeyword(String word) {
+    public String findKeyword(String word) {
         int size = this.list.size();
         CustomList newList = new CustomList();
+        StringBuilder response = new StringBuilder();
 
         for (int i = 0; i < size; i++) {
             Task curr = this.list.get(i);
@@ -134,10 +139,11 @@ public class CustomList {
         }
 
         if (newList.isEmpty()) {
-            System.out.println(Ui.INDENT + "Quack! No task description matches.");
+            return "Quack! No task description matches.";
         } else {
-            System.out.println(Ui.INDENT + "Quack! Here are the matching tasks in your list:");
-            newList.printList();
+            response.append("Quack! Here are the matching tasks in your list:\n");
+            response.append(newList.printList());
+            return response.toString();
         }
     }
 

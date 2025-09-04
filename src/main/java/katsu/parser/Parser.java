@@ -10,13 +10,23 @@ import katsu.ui.Ui;
 public class Parser {
 
     public static String handleCommandTest(String order, Katsu bot) {
-        String[] words = order.split(" ");
+        String[] words = order.stripLeading().stripTrailing().split(" ");
 
-        switch (words[0]) {
+        switch (words[0].toLowerCase()) {
         case "list", "ls":
             return bot.printList();
         case "todo":
             return bot.addToDo(words);
+        case "deadline":
+            return bot.addDeadline(words);
+        case "event":
+            return bot.addEvent(words);
+        case "mark", "unmark":
+            return  bot.handleMarking(words[0], words);
+        case "find":
+            return bot.handleFind(words);
+        case "bye":
+            return bot.deactivate();
         default:
             return "I don't know what that is...";
         }

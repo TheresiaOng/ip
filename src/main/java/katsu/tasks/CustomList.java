@@ -3,8 +3,6 @@ package katsu.tasks;
 import java.util.ArrayList;
 import java.util.List;
 
-import katsu.ui.Ui;
-
 /**
  * Represents a custom list implementation for managing Task objects.
  * Provides functionality to add, remove, mark, and search tasks with user feedback.
@@ -86,23 +84,26 @@ public class CustomList {
      *
      * @param id the string representation of the task number (1-based index)
      */
-    public void deleteTask(String id) {
+    public String deleteTask(String id) {
         int index = Integer.parseInt(id) - 1;
+        StringBuilder response = new StringBuilder();
 
         Task currTask = this.list.get(index);
         this.list.remove(index);
         int size = this.list.size();
 
-        System.out.println(Ui.INDENT + "Quack! I've removed the task below from your list:");
-        System.out.println(Ui.INDENT + "  " + currTask.printTask());
+        response.append("Quack! I've removed the task below from your list:\n");
+        response.append(currTask.printTask()).append("\n");
 
         if (size == 0) {
-            System.out.println(Ui.INDENT + "You have no more task in the list.");
+            response.append("You have no more task in the list.");
         } else if (size == 1) {
-            System.out.println(Ui.INDENT + "You now have 1 task in the list.");
+            response.append("You now have 1 task in the list.");
         } else {
-            System.out.println(Ui.INDENT + "You now have " + size + " tasks in the list.");
+            response.append("You now have ").append(size).append(" tasks in the list.");
         }
+
+        return response.toString();
     }
 
     /**

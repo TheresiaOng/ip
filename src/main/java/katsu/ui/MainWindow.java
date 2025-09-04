@@ -1,6 +1,5 @@
 package katsu.ui;
 
-import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -9,7 +8,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import katsu.Katsu;
 import katsu.parser.Parser;
 
@@ -28,12 +26,21 @@ public class MainWindow extends AnchorPane {
 
     private Katsu katsu;
 
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/userImage.png"));
-    private Image katsuImage = new Image(this.getClass().getResourceAsStream("/images/katsuImage.png"));
+    private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/userImage.png"));
+    private final Image katsuImage = new Image(this.getClass().getResourceAsStream("/images/katsuImage.png"));
 
+    /**
+     * Initializes the GUI components and sets up initial state.
+     * Binds scroll pane to dialog container and shows welcome message.
+     */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+
+        // show first bot message
+        dialogContainer.getChildren().add(
+                DialogBox.getKatsuDialog("Hello! I'm Katsu ꒰ঌ( •ө• )໒꒱! What can I do for you?\n"
+                        + "(type \"help\" for the list of all commands available)", katsuImage));
     }
 
     /** Injects the Duke instance */
@@ -41,24 +48,36 @@ public class MainWindow extends AnchorPane {
         katsu = k;
     }
 
+    /**
+     * Handles user input from the text field.
+     * Processes the command, gets Katsu's response, and updates the dialog display.
+     * Also handles application exit command.
+     */
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String katsuResponse = Parser.handleCommandTest(input, katsu);
+        String katsuResponse = Parser.handleCommand(input, katsu);
 
-        if (katsuResponse.equalsIgnoreCase("exit_application")) {
-            deactive();
+
+        if (katsuResponse != null && katsuResponse.equalsIgnoreCase("exit_application")) {
+            deactivate();
         }
 
-        DialogBox userDialog = DialogBox.getUserDialog(input, userImage);
-        DialogBox katsuDialog = DialogBox.getKatsuDialog(katsuResponse, katsuImage);
+        if (katsuResponse != null) {
+            DialogBox userDialog = DialogBox.getUserDialog(input, userImage);
+            DialogBox katsuDialog = DialogBox.getKatsuDialog(katsuResponse, katsuImage);
 
-        dialogContainer.getChildren().addAll(userDialog, katsuDialog);
+            dialogContainer.getChildren().addAll(userDialog, katsuDialog);
+        }
 
         userInput.clear();
     }
 
-    private void deactive() {
+    /**
+     * Closes the application window.
+     * Called when exit command is received from user.
+     */
+    private void deactivate() {
         Stage stage = (Stage) sendButton.getScene().getWindow();
         stage.close();
     }

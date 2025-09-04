@@ -23,6 +23,12 @@ public class DialogBox extends HBox {
     @FXML
     private ImageView displayPicture;
 
+    /**
+     * Constructs a DialogBox with the specified text and image.
+     *
+     * @param text the dialog text to display
+     * @param img the speaker's profile image
+     */
     public DialogBox(String text, Image img) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/view/DialogBox.fxml"));
@@ -47,10 +53,24 @@ public class DialogBox extends HBox {
         this.getChildren().setAll(tmp);
     }
 
+    /**
+     * Creates a DialogBox for user messages (image on right, text on left).
+     *
+     * @param s the user's message text
+     * @param i the user's profile image
+     * @return a DialogBox configured for user messages
+     */
     public static DialogBox getUserDialog(String s, Image i) {
         return new DialogBox(s, i);
     }
 
+    /**
+     * Creates a DialogBox for Katsu messages (image on left, text on right).
+     *
+     * @param s Katsu's response text
+     * @param i Katsu's profile image
+     * @return a DialogBox configured for Katsu messages
+     */
     public static DialogBox getKatsuDialog(String s, Image i) {
         var db = new DialogBox(s, i);
         db.flip();

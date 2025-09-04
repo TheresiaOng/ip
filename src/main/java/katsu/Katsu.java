@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Scanner;
 
 import katsu.parser.Parser;
 import katsu.storage.Storage;
@@ -15,7 +14,6 @@ import katsu.tasks.CustomList;
 import katsu.tasks.Deadline;
 import katsu.tasks.Event;
 import katsu.tasks.ToDo;
-import katsu.ui.MainWindow;
 import katsu.ui.Ui;
 
 /**
@@ -26,10 +24,8 @@ import katsu.ui.Ui;
 public class Katsu {
     public static final String NAME = "Katsu the Duck";
 
-    private boolean active;
     private CustomList tasks;
     private Storage storage;
-    private Ui ui;
 
     /**
      * Constructs a new <code>Katsu</code> object.
@@ -37,10 +33,8 @@ public class Katsu {
      * The application is initially inactive.
      */
     public Katsu() {
-        this.active = false;
         this.tasks = new CustomList();
         this.storage = new Storage();
-        this.ui = new Ui();
     }
 
     /**
@@ -70,7 +64,6 @@ public class Katsu {
      * until the application is deactivated.
      */
     public void run() {
-        this.active = true;
         try {
             this.tasks = this.storage.loadSave();
         } catch (FileNotFoundException e) {
@@ -78,14 +71,6 @@ public class Katsu {
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println(Ui.INDENT + "Wrong task format in save file.");
         }
-
-//        this.ui.printStartingText();
-//        Scanner scanner = new Scanner(System.in);
-//
-//        while (this.active) {
-//            String order = scanner.nextLine();
-//            Parser.handleCommand(order, this);
-//        }
     }
 
     /**
@@ -113,9 +98,23 @@ public class Katsu {
     /**
      * Prints all available commands to the user.
      */
-    public static void printAllCommands() {
-        System.out.println(Ui.INDENT + "1. lists / ls (to show all of your katsu.tasks)");
-        System.out.println(Ui.INDENT + "2. bye (to end our chat)");
+    public String printAllCommands() {
+        StringBuilder katsuResponse = new StringBuilder();
+
+        katsuResponse.append("Here are some commands you could use ꒰ঌ( •ө• )໒꒱:\n");
+        katsuResponse.append("1. lists (to show all of your tasks)\n");
+        katsuResponse.append("2. todo <description> (to add a todo to your task list)\n");
+        katsuResponse.append("3. deadline <description> /by <yyyy-MM-dd HH:mm>"
+                + "(to add a deadline to your task list)\n");
+        katsuResponse.append("4. event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>"
+                + "(to add an event to your task list)\n");
+        katsuResponse.append("5. mark <task number> (to mark a task as completed)\n");
+        katsuResponse.append("6. unmark <task number> (to unmark a completed task)\n");
+        katsuResponse.append("7. find <description> (to list all task with matching description)\n");
+        katsuResponse.append("8. delete <task number> (to delete a task from your list)\n");
+        katsuResponse.append("9. bye (to end our chat)");
+
+        return katsuResponse.toString();
     }
 
     /**
@@ -133,7 +132,6 @@ public class Katsu {
             return katsuResponse.toString();
         }
 
-        this.active = false;
         return "exit_application";
 
     }
@@ -323,16 +321,16 @@ public class Katsu {
      *
      * @param words Array of user input words for the task.
      */
-    public void handleDelete(String[] words) {
+    public String handleDelete(String[] words) {
         try {
             String taskNum = words[1];
-            this.tasks.deleteTask(taskNum);
+            return this.tasks.deleteTask(taskNum);
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println(Ui.INDENT + "⚠ Quack! You forgot the task number.");
+            return "⚠ Quack! You forgot the task number.";
         } catch (NumberFormatException e) {
-            System.out.println(Ui.INDENT + "⚠ Quack! That does not look like a number... •᷄ɞ•");
+            return "⚠ Quack! That does not look like a number... •᷄ɞ•";
         } catch (IndexOutOfBoundsException e) {
-            System.out.println(Ui.INDENT + "⚠ Quack! You do not have that task number.");
+            return "⚠ Quack! You do not have that task number.";
         }
     }
 

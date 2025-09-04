@@ -1,7 +1,6 @@
 package katsu.parser;
 
 import katsu.Katsu;
-import katsu.ui.Ui;
 
 /**
  * Handles parsing and processing of user commands for the Katsu application.
@@ -9,79 +8,31 @@ import katsu.ui.Ui;
  */
 public class Parser {
 
-    public static String handleCommandTest(String order, Katsu bot) {
-        String[] words = order.stripLeading().stripTrailing().split(" ");
-
-        switch (words[0].toLowerCase()) {
-        case "list", "ls":
-            return bot.printList();
-        case "todo":
-            return bot.addToDo(words);
-        case "deadline":
-            return bot.addDeadline(words);
-        case "event":
-            return bot.addEvent(words);
-        case "mark", "unmark":
-            return  bot.handleMarking(words[0], words);
-        case "find":
-            return bot.handleFind(words);
-        case "bye":
-            return bot.deactivate();
-        default:
-            return "I don't know what that is...";
-        }
-    }
-
     /**
      * Processes and executes the user command by delegating to appropriate bot methods.
      *
      * @param order the full command string entered by the user
      * @param bot the Katsu bot instance to execute commands on
      */
-    public static void handleCommand(String order, Katsu bot) {
-        if (order.isEmpty()) {
-            System.out.println(Ui.SEPARATOR);
-            System.out.println(Ui.INDENT + "Quack! You need to write something!\n");
-            System.out.println(Ui.INDENT + "Here is some commands to help you:");
-            Katsu.printAllCommands();
-            System.out.println(Ui.SEPARATOR + "\n");
-            return;
+    public static String handleCommand(String order, Katsu bot) {
+        if (order.isBlank()) {
+            return null;
         }
 
-        // split words by empty space
-        String[] words = order.split(" ");
-        System.out.println(Ui.SEPARATOR);
+        String[] words = order.strip().split(" ");
 
-        switch (words[0]) {
-        case "bye":
-            bot.deactivate();
-            break;
-        case "list", "ls":
-            bot.printList();
-            break;
-        case "delete", "del":
-            bot.handleDelete(words);
-            break;
-        case "mark", "unmark":
-            bot.handleMarking(words[0], words);
-            break;
-        case "todo":
-            bot.addTask(words, Katsu.TaskType.TODO);
-            break;
-        case "deadline":
-            bot.addTask(words, Katsu.TaskType.DEADLINE);
-            break;
-        case "event":
-            bot.addTask(words, Katsu.TaskType.EVENT);
-            break;
-        case "find":
-            bot.handleFind(words);
-            break;
-        default:
-            System.out.println(Ui.INDENT + "Quack! Sorry, I'm not sure what you meant... `•᷄ɞ•᷅");
-        }
-
-        System.out.println(Ui.SEPARATOR + "\n");
+        return switch (words[0].toLowerCase()) {
+        case "help" -> bot.printAllCommands();
+        case "list", "ls" -> bot.printList();
+        case "todo", "td" -> bot.addToDo(words);
+        case "deadline", "dl" -> bot.addDeadline(words);
+        case "event", "e" -> bot.addEvent(words);
+        case "mark", "unmark" -> bot.handleMarking(words[0], words);
+        case "find", "f" -> bot.handleFind(words);
+        case "delete", "del" -> bot.handleDelete(words);
+        case "bye" -> bot.deactivate();
+        default -> "Quack, I don't know what that is... •᷄ɞ•";
+        };
     }
 
     /**

@@ -113,7 +113,7 @@ public class Katsu {
      * Prints all available commands to the user.
      */
     public static void printAllCommands() {
-        System.out.println(Ui.INDENT + "1. tasks / ls (to show all of your katsu.tasks)");
+        System.out.println(Ui.INDENT + "1. lists / ls (to show all of your katsu.tasks)");
         System.out.println(Ui.INDENT + "2. bye (to end our chat)");
     }
 
@@ -136,13 +136,16 @@ public class Katsu {
      * Prints all tasks in the task tasks if not empty,
      * otherwise prints a message indicating the tasks is empty.
      */
-    public void printList() {
+    public String printList() {
+        StringBuilder allTasks = new StringBuilder();
+
         if (!this.tasks.isEmpty()) {
-            System.out.println(Ui.INDENT + "Here is all of your task, Quack!");
-            this.tasks.printList();
+            allTasks.append("Here is all of your task, Quack!\n");
+            allTasks.append(this.tasks.printList());
         } else {
-            System.out.println(Ui.INDENT + "Quack! Your task list is empty.");
+            allTasks.append("Quack! Your task list is empty.");
         }
+        return allTasks.toString();
     }
 
     /**
@@ -174,16 +177,15 @@ public class Katsu {
      *
      * @param words Array of user input words for the task.
      */
-    public void addToDo(String[] words) {
+    public String addToDo(String[] words) {
         // join words from index 1 until array length to get task
         String newTask = String.join(" ", Arrays.stream(words).skip(1).toArray(String[]::new));
 
         if (newTask.isEmpty()) {
-            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the todo's description.");
-            return;
+            return Ui.INDENT + "⚠ Quack! You're missing the todo's description.";
         }
 
-        this.tasks.add(new ToDo(newTask), false);
+        return this.tasks.add(new ToDo(newTask), false);
     }
 
     /**

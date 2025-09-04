@@ -9,6 +9,19 @@ import katsu.ui.Ui;
  */
 public class Parser {
 
+    public static String handleCommandTest(String order, Katsu bot) {
+        String[] words = order.split(" ");
+
+        switch (words[0]) {
+        case "list", "ls":
+            return bot.printList();
+        case "todo":
+            return bot.addToDo(words);
+        default:
+            return "I don't know what that is...";
+        }
+    }
+
     /**
      * Processes and executes the user command by delegating to appropriate bot methods.
      *

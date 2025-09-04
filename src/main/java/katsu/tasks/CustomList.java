@@ -25,21 +25,25 @@ public class CustomList {
      * @param task the task to be added to the list
      * @param isQuiet if true, suppresses user feedback messages; if false, displays addition confirmation
      */
-    public void add(Task task, boolean isQuiet) {
+    public String add(Task task, boolean isQuiet) {
         if (isQuiet) {
             this.list.add(task);
+            return "";
         } else {
             this.list.add(task);
             int size = this.list.size();
+            StringBuilder katsuResponse = new StringBuilder();
 
-            System.out.println(Ui.INDENT + "Quack! I've added the task below to your list:");
-            System.out.println(Ui.INDENT + "  " + task.printTask());
+            katsuResponse.append("Quack! I've added the task below to your list:\n");
+            katsuResponse.append(task.printTask());
 
             if (size == 1) {
-                System.out.println(Ui.INDENT + "You now have 1 task in the list.");
+                katsuResponse.append("You now have 1 task in the list.");
             } else {
-                System.out.println(Ui.INDENT + "You now have " + size + " katsu.tasks in the list.");
+                katsuResponse.append("You now have ").append(size).append(" katsu.tasks in the list.");
             }
+
+            return katsuResponse.toString();
         }
     }
 
@@ -100,13 +104,16 @@ public class CustomList {
     /**
      * Displays all tasks in the list with their numbering and completion status.
      */
-    public void printList() {
+    public String printList() {
         int size = this.list.size();
+        StringBuilder allTasksInList = new StringBuilder();
 
         for (int i = 0; i < size; i++) {
             int index = i + 1;
-            System.out.println(Ui.INDENT + index + "." + this.list.get(i).printTask());
+            allTasksInList.append(index).append(".").append(this.list.get(i).printTask());
         }
+
+        return allTasksInList.toString();
     }
 
     /**

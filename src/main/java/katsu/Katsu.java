@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Scanner;
 
 import katsu.parser.Parser;
 import katsu.storage.Storage;
@@ -25,10 +24,8 @@ import katsu.ui.Ui;
 public class Katsu {
     public static final String NAME = "Katsu the Duck";
 
-    private boolean active;
     private CustomList tasks;
     private Storage storage;
-    private Ui ui;
 
     /**
      * Constructs a new <code>Katsu</code> object.
@@ -36,10 +33,8 @@ public class Katsu {
      * The application is initially inactive.
      */
     public Katsu() {
-        this.active = false;
         this.tasks = new CustomList();
         this.storage = new Storage();
-        this.ui = new Ui();
     }
 
     /**
@@ -69,21 +64,12 @@ public class Katsu {
      * until the application is deactivated.
      */
     public void run() {
-        this.active = true;
         try {
             this.tasks = this.storage.loadSave();
         } catch (FileNotFoundException e) {
             System.out.println(Ui.INDENT + "No save file found.");
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println(Ui.INDENT + "Wrong task format in save file.");
-        }
-
-        this.ui.printStartingText();
-        Scanner scanner = new Scanner(System.in);
-
-        while (this.active) {
-            String order = scanner.nextLine();
-            Parser.handleCommand(order, this);
         }
     }
 
@@ -112,37 +98,58 @@ public class Katsu {
     /**
      * Prints all available commands to the user.
      */
-    public static void printAllCommands() {
-        System.out.println(Ui.INDENT + "1. tasks / ls (to show all of your katsu.tasks)");
-        System.out.println(Ui.INDENT + "2. bye (to end our chat)");
+    public String printAllCommands() {
+        StringBuilder katsuResponse = new StringBuilder();
+
+        katsuResponse.append("Here are some commands you could use ꒰ঌ( •ө• )໒꒱:\n");
+        katsuResponse.append("1. lists (to show all of your tasks)\n");
+        katsuResponse.append("2. todo <description> (to add a todo to your task list)\n");
+        katsuResponse.append("3. deadline <description> /by <yyyy-MM-dd HH:mm>"
+                + "(to add a deadline to your task list)\n");
+        katsuResponse.append("4. event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>"
+                + "(to add an event to your task list)\n");
+        katsuResponse.append("5. mark <task number> (to mark a task as completed)\n");
+        katsuResponse.append("6. unmark <task number> (to unmark a completed task)\n");
+        katsuResponse.append("7. find <description> (to list all task with matching description)\n");
+        katsuResponse.append("8. delete <task number> (to delete a task from your list)\n");
+        katsuResponse.append("9. bye (to end our chat)");
+
+        return katsuResponse.toString();
     }
 
     /**
      * Deactivates the Katsu application.
      * Saves tasks to storage, sets active status to false, and prints farewell message.
      */
-    public void deactivate() {
+    public String deactivate() {
+        StringBuilder katsuResponse = new StringBuilder();
+
         try {
             this.storage.save(this.tasks);
         } catch (IOException e) {
-            System.out.println(Ui.INDENT + "Error while saving file.");
+            katsuResponse.append("Error while saving file.\n");
+            katsuResponse.append(("Please try again later."));
+            return katsuResponse.toString();
         }
 
-        this.active = false;
-        System.out.println(Ui.INDENT + "Quack. Hope to see you again soon!");
+        return "exit_application";
+
     }
 
     /**
      * Prints all tasks in the task tasks if not empty,
      * otherwise prints a message indicating the tasks is empty.
      */
-    public void printList() {
+    public String printList() {
+        StringBuilder allTasks = new StringBuilder();
+
         if (!this.tasks.isEmpty()) {
-            System.out.println(Ui.INDENT + "Here is all of your task, Quack!");
-            this.tasks.printList();
+            allTasks.append("Here is all of your task, Quack!\n");
+            allTasks.append(this.tasks.printList());
         } else {
-            System.out.println(Ui.INDENT + "Quack! Your task list is empty.");
+            allTasks.append("Quack! Your task list is empty.");
         }
+        return allTasks.toString();
     }
 
     /**
@@ -174,16 +181,15 @@ public class Katsu {
      *
      * @param words Array of user input words for the task.
      */
-    public void addToDo(String[] words) {
+    public String addToDo(String[] words) {
         // join words from index 1 until array length to get task
         String newTask = String.join(" ", Arrays.stream(words).skip(1).toArray(String[]::new));
 
         if (newTask.isEmpty()) {
-            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the todo's description.");
-            return;
+            return "⚠ Quack! You're missing the todo's description.";
         }
 
-        this.tasks.add(new ToDo(newTask), false);
+        return this.tasks.add(new ToDo(newTask), false);
     }
 
     /**
@@ -191,30 +197,31 @@ public class Katsu {
      *
      * @param words Array of user input words for the task.
      */
-    public void addDeadline(String[] words) {
+    public String addDeadline(String[] words) {
         String newTask;
         String newDeadline;
         int byPosition = Parser.findWord(words, "/by", -1);
+        StringBuilder katsuResponse = new StringBuilder();
 
         newTask = (byPosition == -1)
                 ? String.join(" ", Arrays.copyOfRange(words, 1, words.length))
                 : String.join(" ", Arrays.copyOfRange(words, 1, byPosition));
 
         if (newTask.isEmpty()) {
-            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the deadline's description.");
-            return;
+            katsuResponse.append("⚠ Quack! You're missing the deadline's description.");
+            return katsuResponse.toString();
         }
 
         if (byPosition == -1 || byPosition + 1 >= words.length) {
-            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the deadline.");
-            System.out.println(Ui.INDENT + "(use '/by' followed by the deadline).");
-            return;
+            katsuResponse.append("⚠ Quack! You're missing the deadline.\n");
+            katsuResponse.append("(use '/by' followed by the deadline).");
+            return katsuResponse.toString();
         }
 
         newDeadline = String.join(" ", Arrays.copyOfRange(words, byPosition + 1, words.length));
         LocalDateTime deadline = convertStringToDateTime(newDeadline);
 
-        this.tasks.add(new Deadline(newTask, deadline), false);
+        return this.tasks.add(new Deadline(newTask, deadline), false);
     }
 
     /**
@@ -222,10 +229,11 @@ public class Katsu {
      *
      * @param words Array of user input words for the task.
      */
-    public void addEvent(String[] words) {
+    public String addEvent(String[] words) {
         String newTask;
         String newStartTime;
         String newEndTime;
+        StringBuilder katsuResponse = new StringBuilder();
 
         int fromPosition = Parser.findWord(words, "/from", -1);
 
@@ -234,14 +242,14 @@ public class Katsu {
                 : String.join(" ", Arrays.copyOfRange(words, 1, fromPosition));
 
         if (newTask.isEmpty()) {
-            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the event's description.");
-            return;
+            katsuResponse.append("⚠ Quack! You're missing the event's description.\n");
+            return katsuResponse.toString();
         }
 
         if (fromPosition == -1) {
-            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the event's starting time.");
-            System.out.println(Ui.INDENT + "(use '/from' followed by the start time).");
-            return;
+            katsuResponse.append("⚠ Quack! You're missing the event's starting time.\n");
+            katsuResponse.append("(use '/from' followed by the start time).");
+            return katsuResponse.toString();
         }
 
         int toPosition;
@@ -254,34 +262,34 @@ public class Katsu {
                     : String.join(" ", Arrays.copyOfRange(words, fromPosition + 1, toPosition));
 
             if (newStartTime.isEmpty()) {
-                System.out.println(Ui.INDENT + "⚠ Quack! You're missing the event's starting time.");
-                System.out.println(Ui.INDENT + "(use '/from' followed by the start time).");
-                return;
+                katsuResponse.append("⚠ Quack! You're missing the event's starting time.\n");
+                katsuResponse.append("(use '/from' followed by the start time).");
+                return katsuResponse.toString();
             }
 
             if (toPosition == -1) {
-                System.out.println(Ui.INDENT + "⚠ Quack! You're missing the event's ending time.");
-                System.out.println(Ui.INDENT + "(use '/to' followed by the end time).");
-                return;
+                katsuResponse.append("⚠ Quack! You're missing the event's ending time.\n");
+                katsuResponse.append("(use '/to' followed by the end time).");
+                return katsuResponse.toString();
             }
         } else {
-            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the event's starting time.");
-            System.out.println(Ui.INDENT + "(use '/from' followed by the start time).");
-            return;
+            katsuResponse.append("⚠ Quack! You're missing the event's starting time.\n");
+            katsuResponse.append("(use '/from' followed by the start time).");
+            return katsuResponse.toString();
         }
 
         if (toPosition + 1 < words.length) {
             newEndTime = String.join(" ", Arrays.copyOfRange(words, toPosition + 1, words.length));
         } else {
-            System.out.println(Ui.INDENT + "⚠ Quack! You're missing the event's ending time.");
-            System.out.println(Ui.INDENT + "(use '/to' followed by the end time).");
-            return;
+            katsuResponse.append("⚠ Quack! You're missing the event's ending time.\n");
+            katsuResponse.append("(use '/to' followed by the end time).");
+            return katsuResponse.toString();
         }
 
         LocalDate startDate = convertStringToDate(newStartTime);
         LocalDate endDate = convertStringToDate(newEndTime);
 
-        this.tasks.add(new Event(newTask, startDate, endDate), false);
+        return this.tasks.add(new Event(newTask, startDate, endDate), false);
     }
 
     /**
@@ -291,20 +299,20 @@ public class Katsu {
      * @param command Either "mark" or "unmark".
      * @param words Array of user input words for the task.
      */
-    public void handleMarking(String command, String[] words) {
+    public String handleMarking(String command, String[] words) {
         try {
             String taskNum = words[1];
             if (Objects.equals(command, "mark")) {
-                this.tasks.markCompleted(taskNum);
+                return this.tasks.markCompleted(taskNum);
             } else {
-                this.tasks.markUncompleted(taskNum);
+                return this.tasks.markUncompleted(taskNum);
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println(Ui.INDENT + "⚠ Quack! You forgot the task number.");
+            return "⚠ Quack! You forgot the task number.";
         } catch (NumberFormatException e) {
-            System.out.println(Ui.INDENT + "⚠ Quack! That does not look like a number... •᷄ɞ•");
+            return "⚠ Quack! That does not look like a number... •᷄ɞ•";
         } catch (IndexOutOfBoundsException e) {
-            System.out.println(Ui.INDENT + "⚠ Quack! You do not have that task number.");
+            return "⚠ Quack! You do not have that task number.";
         }
     }
 
@@ -313,16 +321,16 @@ public class Katsu {
      *
      * @param words Array of user input words for the task.
      */
-    public void handleDelete(String[] words) {
+    public String handleDelete(String[] words) {
         try {
             String taskNum = words[1];
-            this.tasks.deleteTask(taskNum);
+            return this.tasks.deleteTask(taskNum);
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println(Ui.INDENT + "⚠ Quack! You forgot the task number.");
+            return "⚠ Quack! You forgot the task number.";
         } catch (NumberFormatException e) {
-            System.out.println(Ui.INDENT + "⚠ Quack! That does not look like a number... •᷄ɞ•");
+            return "⚠ Quack! That does not look like a number... •᷄ɞ•";
         } catch (IndexOutOfBoundsException e) {
-            System.out.println(Ui.INDENT + "⚠ Quack! You do not have that task number.");
+            return "⚠ Quack! You do not have that task number.";
         }
     }
 
@@ -331,11 +339,11 @@ public class Katsu {
      *
      * @param words array of user input words containing the search keyword
      */
-    public void handleFind(String[] words) {
+    public String handleFind(String[] words) {
         try {
-            this.tasks.findKeyword(words[1]);
+            return this.tasks.findKeyword(words[1]);
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println(Ui.INDENT + "⚠ Quack! What do you want to find?");
+            return "⚠ Quack! What do you want to find?";
         }
     }
 }

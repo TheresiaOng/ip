@@ -3,8 +3,6 @@ package katsu.tasks;
 import java.util.ArrayList;
 import java.util.List;
 
-import katsu.ui.Ui;
-
 /**
  * Represents a custom list implementation for managing Task objects.
  * Provides functionality to add, remove, mark, and search tasks with user feedback.
@@ -25,21 +23,25 @@ public class CustomList {
      * @param task the task to be added to the list
      * @param isQuiet if true, suppresses user feedback messages; if false, displays addition confirmation
      */
-    public void add(Task task, boolean isQuiet) {
+    public String add(Task task, boolean isQuiet) {
         if (isQuiet) {
             this.list.add(task);
+            return "";
         } else {
             this.list.add(task);
             int size = this.list.size();
+            StringBuilder katsuResponse = new StringBuilder();
 
-            System.out.println(Ui.INDENT + "Quack! I've added the task below to your list:");
-            System.out.println(Ui.INDENT + "  " + task.printTask());
+            katsuResponse.append("Quack! I've added the task below to your list:\n");
+            katsuResponse.append(task.printTask()).append("\n");
 
             if (size == 1) {
-                System.out.println(Ui.INDENT + "You now have 1 task in the list.");
+                katsuResponse.append("You now have 1 task in the list.");
             } else {
-                System.out.println(Ui.INDENT + "You now have " + size + " katsu.tasks in the list.");
+                katsuResponse.append("You now have ").append(size).append(" katsu.tasks in the list.");
             }
+
+            return katsuResponse.toString();
         }
     }
 
@@ -48,14 +50,16 @@ public class CustomList {
      *
      * @param id the string representation of the task number (1-based index)
      */
-    public void markCompleted(String id) {
+    public String markCompleted(String id) {
         int index = Integer.parseInt(id) - 1;
+        StringBuilder response = new StringBuilder();
 
         Task currTask = this.list.get(index);
         currTask.markCompleted();
 
-        System.out.println(Ui.INDENT + "Quack! I have  marked this task as done:");
-        System.out.println(Ui.INDENT + "  " + currTask.printTask());
+        response.append("Quack! I have  marked this task as done:\n");
+        response.append(currTask.printTask());
+        return response.toString();
     }
 
     /**
@@ -63,14 +67,16 @@ public class CustomList {
      *
      * @param id the string representation of the task number (1-based index)
      */
-    public void markUncompleted(String id) {
+    public String markUncompleted(String id) {
         int index = Integer.parseInt(id) - 1;
+        StringBuilder response = new StringBuilder();
 
         Task currTask = this.list.get(index);
         currTask.markUncompleted();
 
-        System.out.println(Ui.INDENT + "Quack! I have  marked this task as not done yet:");
-        System.out.println(Ui.INDENT + "  " + currTask.printTask());
+        response.append("Quack! I have  marked this task as not done yet:\n");
+        response.append(currTask.printTask());
+        return response.toString();
     }
 
     /**
@@ -78,35 +84,41 @@ public class CustomList {
      *
      * @param id the string representation of the task number (1-based index)
      */
-    public void deleteTask(String id) {
+    public String deleteTask(String id) {
         int index = Integer.parseInt(id) - 1;
+        StringBuilder response = new StringBuilder();
 
         Task currTask = this.list.get(index);
         this.list.remove(index);
         int size = this.list.size();
 
-        System.out.println(Ui.INDENT + "Quack! I've removed the task below from your list:");
-        System.out.println(Ui.INDENT + "  " + currTask.printTask());
+        response.append("Quack! I've removed the task below from your list:\n");
+        response.append(currTask.printTask()).append("\n");
 
         if (size == 0) {
-            System.out.println(Ui.INDENT + "You have no more task in the list.");
+            response.append("You have no more task in the list.");
         } else if (size == 1) {
-            System.out.println(Ui.INDENT + "You now have 1 task in the list.");
+            response.append("You now have 1 task in the list.");
         } else {
-            System.out.println(Ui.INDENT + "You now have " + size + " tasks in the list.");
+            response.append("You now have ").append(size).append(" tasks in the list.");
         }
+
+        return response.toString();
     }
 
     /**
      * Displays all tasks in the list with their numbering and completion status.
      */
-    public void printList() {
+    public String printList() {
         int size = this.list.size();
+        StringBuilder allTasksInList = new StringBuilder();
 
         for (int i = 0; i < size; i++) {
             int index = i + 1;
-            System.out.println(Ui.INDENT + index + "." + this.list.get(i).printTask());
+            allTasksInList.append(index).append(". ").append(this.list.get(i).printTask()).append("\n");
         }
+
+        return allTasksInList.toString();
     }
 
     /**
@@ -114,9 +126,10 @@ public class CustomList {
      *
      * @param word the keyword to search for in task descriptions
      */
-    public void findKeyword(String word) {
+    public String findKeyword(String word) {
         int size = this.list.size();
         CustomList newList = new CustomList();
+        StringBuilder response = new StringBuilder();
 
         for (int i = 0; i < size; i++) {
             Task curr = this.list.get(i);
@@ -127,10 +140,11 @@ public class CustomList {
         }
 
         if (newList.isEmpty()) {
-            System.out.println(Ui.INDENT + "Quack! No task description matches.");
+            return "Quack! No task description matches.";
         } else {
-            System.out.println(Ui.INDENT + "Quack! Here are the matching tasks in your list:");
-            newList.printList();
+            response.append("Quack! Here are the matching tasks in your list:\n");
+            response.append(newList.printList());
+            return response.toString();
         }
     }
 

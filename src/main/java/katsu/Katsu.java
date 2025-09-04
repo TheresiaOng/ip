@@ -47,18 +47,6 @@ public class Katsu {
     }
 
     /**
-     * Represents the different types of tasks supported by the application.
-     *
-     * The available task types are:
-     * <code>TODO</code> - A simple task without any date/time constraints</li>
-     * <code>DEADLINE</code> - A task with a specific due date and time</li>
-     * <code>EVENT</code> - A task with a start and end date</li>
-     */
-    public enum TaskType {
-        TODO, DEADLINE, EVENT
-    }
-
-    /**
      * Starts the Katsu application.
      * Loads tasks from storage, prints the welcome message, and listens for user input
      * until the application is deactivated.
@@ -153,35 +141,11 @@ public class Katsu {
     }
 
     /**
-     * Adds a task to the task tasks.
-     * The type of task is determined by the <code>TaskType</code> parameter.
-     *
-     * @param words Array of user input words for the task.
-     * @param type Type of task to add (TODO, DEADLINE, EVENT).
-     */
-    public void addTask(String[] words, TaskType type) {
-        switch (type) {
-        case TODO:
-            this.addToDo(words);
-            break;
-        case DEADLINE:
-            this.addDeadline(words);
-            break;
-        case EVENT:
-            this.addEvent(words);
-            break;
-        default:
-            System.out.println(Ui.INDENT + "⚠ Unknown task type: " + type);
-            break;
-        }
-    }
-
-    /**
      * Adds a task of type TODO to the task tasks.
      *
      * @param words Array of user input words for the task.
      */
-    public String addToDo(String[] words) {
+    public String addToDo(String... words) {
         // join words from index 1 until array length to get task
         String newTask = String.join(" ", Arrays.stream(words).skip(1).toArray(String[]::new));
 
@@ -197,7 +161,7 @@ public class Katsu {
      *
      * @param words Array of user input words for the task.
      */
-    public String addDeadline(String[] words) {
+    public String addDeadline(String... words) {
         String newTask;
         String newDeadline;
         int byPosition = Parser.findWord(words, "/by", -1);
@@ -229,7 +193,7 @@ public class Katsu {
      *
      * @param words Array of user input words for the task.
      */
-    public String addEvent(String[] words) {
+    public String addEvent(String... words) {
         String newTask;
         String newStartTime;
         String newEndTime;
@@ -299,7 +263,7 @@ public class Katsu {
      * @param command Either "mark" or "unmark".
      * @param words Array of user input words for the task.
      */
-    public String handleMarking(String command, String[] words) {
+    public String handleMarking(String command, String... words) {
         try {
             String taskNum = words[1];
             if (Objects.equals(command, "mark")) {
@@ -321,7 +285,7 @@ public class Katsu {
      *
      * @param words Array of user input words for the task.
      */
-    public String handleDelete(String[] words) {
+    public String handleDelete(String... words) {
         try {
             String taskNum = words[1];
             return this.tasks.deleteTask(taskNum);
@@ -339,7 +303,7 @@ public class Katsu {
      *
      * @param words array of user input words containing the search keyword
      */
-    public String handleFind(String[] words) {
+    public String handleFind(String... words) {
         try {
             return this.tasks.findKeyword(words[1]);
         } catch (ArrayIndexOutOfBoundsException e) {

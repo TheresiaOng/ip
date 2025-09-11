@@ -153,6 +153,13 @@ public class CustomList {
         }
     }
 
+    /**
+     * Sorts tasks from earliest to latest date and returns a formatted response.
+     * Tasks that implement Schedulable are sorted by their comparable date,
+     * while other tasks (like ToDos) are placed at the beginning.
+     *
+     * @return a formatted string showing tasks sorted from earliest to latest
+     */
     public String sortEarliest() {
         if (this.list.isEmpty()) {
             return "Quack! You have no tasks in your list.";
@@ -170,6 +177,13 @@ public class CustomList {
         return response.toString();
     }
 
+    /**
+     * Sorts tasks from latest to earliest date and returns a formatted response.
+     * Tasks that implement Schedulable are sorted by their comparable date in reverse order,
+     * while other tasks (like ToDos) are placed at the end.
+     *
+     * @return a formatted string showing tasks sorted from latest to earliest
+     */
     public String sortLatest() {
         if (this.list.isEmpty()) {
             return "Quack! You have no tasks in your list.";
@@ -180,9 +194,7 @@ public class CustomList {
         this.list.sort(Comparator.comparing(
                 task -> (task instanceof Schedulable)
                         ? ((Schedulable) task).getComparableDate()
-                        : LocalDateTime.MIN, // ToDos get Min → start of list
-                Comparator.reverseOrder()   // descending
-        ));
+                        : LocalDateTime.MIN, Comparator.reverseOrder()));
 
         response.append("Quack! Here are your tasks sorted from the earliest:\n");
         response.append(this.printList());

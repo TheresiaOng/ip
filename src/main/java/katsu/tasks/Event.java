@@ -1,6 +1,5 @@
 package katsu.tasks;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import katsu.util.DateUtils;
@@ -9,7 +8,7 @@ import katsu.util.DateUtils;
  * Represents an event task with a specific start and end time.
  * Extends the base Task class to include date range information.
  */
-public class Event extends Task implements Schedulable{
+public class Event extends Task implements Schedulable {
     private static final String LABEL = "[E]";
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -50,6 +49,12 @@ public class Event extends Task implements Schedulable{
         return "E | " + super.formatSave() + " | " + this.startDate + " | " + this.endDate;
     }
 
+    /**
+     * Returns the start date of the task for comparison and sorting purposes.
+     * This method allows the task to be sorted chronologically with other schedulable tasks.
+     *
+     * @return the LocalDateTime representing the task's start date
+     */
     public LocalDateTime getComparableDate() {
         return this.startDate;
     }

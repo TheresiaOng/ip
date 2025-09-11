@@ -2,7 +2,6 @@ package katsu;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
@@ -290,6 +289,13 @@ public class Katsu {
         }
     }
 
+    /**
+     * Handles the sort command by delegating to appropriate sorting methods.
+     * Supports sorting by "earliest" or "latest" criteria.
+     *
+     * @param words the command words containing the sort direction
+     * @return a formatted string with sorted tasks or an error message
+     */
     public String handleSort(String... words) {
         try {
             if (words[1].equalsIgnoreCase("earliest")) {

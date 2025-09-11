@@ -1,14 +1,15 @@
 package katsu.tasks;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
+import katsu.util.DateUtils;
 
 /**
  * Represents an event task with a specific start and end time.
  * Extends the base Task class to include date range information.
  */
 public class Event extends Task {
-    private static final String label = "[E]";
+    private static final String LABEL = "[E]";
     private LocalDate startDate;
     private LocalDate endDate;
 
@@ -26,18 +27,6 @@ public class Event extends Task {
     }
 
     /**
-     * Converts a <code>LocalDate</code> object to a formatted string representation.
-     * The format used is "MMM dd yyyy" (e.g., "Jan 15 2024").
-     *
-     * @param date the <code>LocalDate</code> object to format
-     * @return a formatted string representation of the date
-     */
-    public String convertDateToString(LocalDate date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
-        return date.format(formatter);
-    }
-
-    /**
      * Returns a formatted string representation of the event task for display purposes.
      * Includes the event label, completion status, task description, and date range.
      *
@@ -45,8 +34,8 @@ public class Event extends Task {
      */
     @Override
     public String printTask() {
-        return label + super.printTask() + " (from: " + this.convertDateToString(startDate)
-                + " to: " + this.convertDateToString(endDate) + ")";
+        return LABEL + super.printTask() + " (from: " + DateUtils.convertDateToString(startDate)
+                + " to: " + DateUtils.convertDateToString(endDate) + ")";
     }
 
     /**

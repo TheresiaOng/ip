@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -15,6 +14,7 @@ import katsu.tasks.Deadline;
 import katsu.tasks.Event;
 import katsu.tasks.ToDo;
 import katsu.ui.Ui;
+import katsu.util.DateUtils;
 
 /**
  * Main class for Katsu the Duck application.
@@ -61,27 +61,6 @@ public class Katsu {
         }
     }
 
-    /**
-     * Converts a date string into a <code>LocalDate</code> object.
-     *
-     * @param dateString The date in "yyyy-MM-dd" format.
-     * @return <code>LocalDate</code> representing the input string.
-     */
-    public static LocalDate convertStringToDate(String dateString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return LocalDate.parse(dateString, formatter);
-    }
-
-    /**
-     * Converts a date and time string into a <code>LocalDateTime</code> object.
-     *
-     * @param dateTimeString The date in "yyyy-MM-dd HH:mm" format.
-     * @return <code>LocalDateTime</code> representing the input string.
-     */
-    public static LocalDateTime convertStringToDateTime(String dateTimeString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return LocalDateTime.parse(dateTimeString, formatter);
-    }
 
     /**
      * Prints all available commands to the user.
@@ -183,7 +162,7 @@ public class Katsu {
         }
 
         newDeadline = String.join(" ", Arrays.copyOfRange(words, byPosition + 1, words.length));
-        LocalDateTime deadline = convertStringToDateTime(newDeadline);
+        LocalDateTime deadline = DateUtils.convertStringToDateTime(newDeadline);
 
         return this.tasks.add(new Deadline(newTask, deadline), false);
     }
@@ -250,8 +229,8 @@ public class Katsu {
             return katsuResponse.toString();
         }
 
-        LocalDate startDate = convertStringToDate(newStartTime);
-        LocalDate endDate = convertStringToDate(newEndTime);
+        LocalDate startDate = DateUtils.convertStringToDate(newStartTime);
+        LocalDate endDate = DateUtils.convertStringToDate(newEndTime);
 
         return this.tasks.add(new Event(newTask, startDate, endDate), false);
     }

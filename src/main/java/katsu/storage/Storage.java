@@ -8,12 +8,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
-import katsu.Katsu;
 import katsu.tasks.CustomList;
 import katsu.tasks.Deadline;
 import katsu.tasks.Event;
 import katsu.tasks.ToDo;
 import katsu.ui.Ui;
+import katsu.util.DateUtils;
 
 /**
  * Handles loading and saving of task data to persistent storage.
@@ -52,12 +52,12 @@ public class Storage {
                 tasks.add(new ToDo(taskDetails[2]), true);
                 break;
             case "D":
-                LocalDateTime dueDate = Katsu.convertStringToDateTime(taskDetails[3]);
+                LocalDateTime dueDate = DateUtils.convertStringToDateTime(taskDetails[3]);
                 tasks.add(new Deadline(taskDetails[2], dueDate), true);
                 break;
             case "E":
-                LocalDate startDate = Katsu.convertStringToDate(taskDetails[3]);
-                LocalDate endDate = Katsu.convertStringToDate(taskDetails[4]);
+                LocalDate startDate = DateUtils.convertStringToDate(taskDetails[3]);
+                LocalDate endDate = DateUtils.convertStringToDate(taskDetails[4]);
                 tasks.add(new Event(taskDetails[2], startDate, endDate), true);
                 break;
             default:
@@ -83,7 +83,7 @@ public class Storage {
      * @throws java.io.IOException if an I/O error occurs during file writing
      */
     public void save(CustomList data) throws IOException {
-        System.out.println(Ui.INDENT + "Saving katsu.tasks...");
+        System.out.println(Ui.INDENT + "Saving tasks...");
 
         File save = new File("data/katsuSave.txt");
         save.getParentFile().mkdirs();

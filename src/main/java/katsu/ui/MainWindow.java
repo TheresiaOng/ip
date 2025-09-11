@@ -1,5 +1,7 @@
 package katsu.ui;
 
+import java.util.Objects;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -26,8 +28,10 @@ public class MainWindow extends AnchorPane {
 
     private Katsu katsu;
 
-    private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/userImage.png"));
-    private final Image katsuImage = new Image(this.getClass().getResourceAsStream("/images/katsuImage.png"));
+    private final Image userImage = new Image(Objects
+            .requireNonNull(this.getClass().getResourceAsStream("/images/userImage.png")));
+    private final Image katsuImage = new Image(Objects
+            .requireNonNull(this.getClass().getResourceAsStream("/images/katsuImage.png")));
 
     /**
      * Initializes the GUI components and sets up initial state.

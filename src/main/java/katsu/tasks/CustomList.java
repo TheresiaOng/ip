@@ -2,6 +2,8 @@ package katsu.tasks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Represents a custom list implementation for managing Task objects.
@@ -117,14 +119,10 @@ public class CustomList {
      */
     public String printList() {
         int size = this.list.size();
-        StringBuilder allTasksInList = new StringBuilder();
 
-        for (int i = 0; i < size; i++) {
-            int index = i + 1;
-            allTasksInList.append(index).append(". ").append(this.list.get(i).printTask()).append("\n");
-        }
-
-        return allTasksInList.toString();
+        return IntStream.range(0, size)
+                .mapToObj((index) -> (index + 1) + ". " + this.list.get(index).printTask())
+                .collect(Collectors.joining("\n"));
     }
 
     /**
@@ -133,17 +131,12 @@ public class CustomList {
      * @param word the keyword to search for in task descriptions
      */
     public String findKeyword(String word) {
-        int size = this.list.size();
         CustomList newList = new CustomList();
         StringBuilder response = new StringBuilder();
 
-        for (int i = 0; i < size; i++) {
-            Task curr = this.list.get(i);
-
-            if (curr.hasKeyword(word)) {
-                newList.add(curr, true);
-            }
-        }
+        this.list.stream()
+                .filter((task) -> task.hasKeyword(word))
+                .forEach((task) -> newList.add(task, true));
 
         if (newList.isEmpty()) {
             return "Quack! No task description matches.";

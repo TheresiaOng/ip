@@ -5,7 +5,7 @@ package katsu.tasks;
  * Extends the base Task class for basic task functionality.
  */
 public class ToDo extends Task {
-    private static final String label = "[T]";
+    private static final String LABEL = "[T]";
 
     /**
      * Constructs a new <code>ToDo</code> object.
@@ -24,7 +24,7 @@ public class ToDo extends Task {
      */
     @Override
     public String printTask() {
-        return label + super.printTask();
+        return LABEL + super.printTask();
     }
 
     /**

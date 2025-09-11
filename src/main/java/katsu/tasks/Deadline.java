@@ -3,12 +3,14 @@ package katsu.tasks;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import katsu.util.DateUtils;
+
 /**
  * Represents a task with a specific dueDate.
  * Extends the base Task class to include date and time information.
  */
 public class Deadline extends Task {
-    private static final String label = "[D]";
+    private static final String LABEL = "[D]";
     private LocalDateTime dueDate;
 
     /**
@@ -22,17 +24,6 @@ public class Deadline extends Task {
         this.dueDate = dueDate;
     }
 
-    /**
-     * Converts a <code>LocalDateTime</code>> object to a formatted string representation.
-     * The format used is "MMM dd yyyy hh:mm a" (e.g., "Jan 15 2024 02:30 PM").
-     *
-     * @param date the LocalDateTime object to format
-     * @return a formatted string representation of the date and time
-     */
-    public String convertDateToString(LocalDateTime date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy hh:mm a");
-        return date.format(formatter);
-    }
 
     /**
      * Returns a formatted string representation of the dueDate task for display purposes.
@@ -42,7 +33,7 @@ public class Deadline extends Task {
      */
     @Override
     public String printTask() {
-        return label + super.printTask() + " (by: " + this.convertDateToString(dueDate) + ")";
+        return LABEL + super.printTask() + " (by: " + DateUtils.convertDateTimeToString(dueDate) + ")";
     }
 
     /**

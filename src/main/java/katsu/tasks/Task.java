@@ -37,9 +37,9 @@ public abstract class Task {
 
     /**
      * Returns a formatted string representation of the description for display purposes.
-     * The format includes a checkbox indicator and the description description.
+     * The format includes a checkbox indicator and the description.
      *
-     * @return a formatted string showing completion status and description description
+     * @return a formatted string showing completion status and description
      */
     public String printTask() {
         String mark;
@@ -65,11 +65,11 @@ public abstract class Task {
     }
 
     /**
-     * Checks if the description description contains the specified keyword.
+     * Checks if the description contains the specified keyword.
      * This method is case-sensitive.
      *
-     * @param word the keyword to search for in the description description
-     * @return true if the description description contains the keyword, false otherwise
+     * @param word the keyword to search for in the description
+     * @return true if the description contains the keyword, false otherwise
      */
     public boolean hasKeyword(String word) {
         return this.description.contains(word);

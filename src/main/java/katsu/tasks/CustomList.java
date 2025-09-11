@@ -52,6 +52,8 @@ public class CustomList {
      */
     public String markCompleted(String id) {
         int index = Integer.parseInt(id) - 1;
+        assert index >= 0 : "index should be >= 0";
+
         StringBuilder response = new StringBuilder();
 
         Task currTask = this.list.get(index);
@@ -69,6 +71,8 @@ public class CustomList {
      */
     public String markUncompleted(String id) {
         int index = Integer.parseInt(id) - 1;
+        assert index >= 0 : "index should be >= 0";
+
         StringBuilder response = new StringBuilder();
 
         Task currTask = this.list.get(index);
@@ -86,6 +90,8 @@ public class CustomList {
      */
     public String deleteTask(String id) {
         int index = Integer.parseInt(id) - 1;
+        assert index >= 0 : "index should be >= 0";
+
         StringBuilder response = new StringBuilder();
 
         Task currTask = this.list.get(index);

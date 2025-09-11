@@ -83,7 +83,7 @@ public class Storage {
      * @throws java.io.IOException if an I/O error occurs during file writing
      */
     public void save(CustomList data) throws IOException {
-        System.out.println(Ui.INDENT + "Saving katsu.tasks...");
+        System.out.println(Ui.INDENT + "Saving tasks...");
 
         File save = new File("data/katsuSave.txt");
         save.getParentFile().mkdirs();

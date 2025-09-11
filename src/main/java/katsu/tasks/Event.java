@@ -1,6 +1,7 @@
 package katsu.tasks;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import katsu.util.DateUtils;
 
@@ -8,10 +9,10 @@ import katsu.util.DateUtils;
  * Represents an event task with a specific start and end time.
  * Extends the base Task class to include date range information.
  */
-public class Event extends Task {
+public class Event extends Task implements Schedulable{
     private static final String LABEL = "[E]";
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
     /**
      * Constructs a new <code>Event</code> object.
@@ -20,7 +21,7 @@ public class Event extends Task {
      * @param startDate the starting time of the event
      * @param endDate the end time of the event
      */
-    public Event(String task, LocalDate startDate, LocalDate endDate) {
+    public Event(String task, LocalDateTime startDate, LocalDateTime endDate) {
         super(task);
         this.startDate = startDate;
         this.endDate = endDate;
@@ -34,8 +35,8 @@ public class Event extends Task {
      */
     @Override
     public String printTask() {
-        return LABEL + super.printTask() + " (from: " + DateUtils.convertDateToString(startDate)
-                + " to: " + DateUtils.convertDateToString(endDate) + ")";
+        return LABEL + super.printTask() + " (from: " + DateUtils.convertDateTimeToString(startDate)
+                + " to: " + DateUtils.convertDateTimeToString(endDate) + ")";
     }
 
     /**
@@ -47,5 +48,9 @@ public class Event extends Task {
     @Override
     public String formatSave() {
         return "E | " + super.formatSave() + " | " + this.startDate + " | " + this.endDate;
+    }
+
+    public LocalDateTime getComparableDate() {
+        return this.startDate;
     }
 }

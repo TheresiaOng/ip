@@ -1,6 +1,8 @@
 package katsu.tasks;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -40,7 +42,7 @@ public class CustomList {
             if (size == 1) {
                 katsuResponse.append("You now have 1 task in the list.");
             } else {
-                katsuResponse.append("You now have ").append(size).append(" katsu.tasks in the list.");
+                katsuResponse.append("You now have ").append(size).append(" tasks in the list.");
             }
 
             return katsuResponse.toString();
@@ -131,6 +133,10 @@ public class CustomList {
      * @param word the keyword to search for in task descriptions
      */
     public String findKeyword(String word) {
+        if (this.list.isEmpty()) {
+            return "Quack! You have no tasks in your list.";
+        }
+
         CustomList newList = new CustomList();
         StringBuilder response = new StringBuilder();
 
@@ -145,6 +151,42 @@ public class CustomList {
             response.append(newList.printList());
             return response.toString();
         }
+    }
+
+    public String sortEarliest() {
+        if (this.list.isEmpty()) {
+            return "Quack! You have no tasks in your list.";
+        }
+
+        StringBuilder response = new StringBuilder();
+
+        this.list.sort(Comparator.comparing(
+                task -> (task instanceof Schedulable)
+                        ? ((Schedulable) task).getComparableDate()
+                        : LocalDateTime.MIN));
+
+        response.append("Quack! Here are your tasks sorted from the latest:\n");
+        response.append(this.printList());
+        return response.toString();
+    }
+
+    public String sortLatest() {
+        if (this.list.isEmpty()) {
+            return "Quack! You have no tasks in your list.";
+        }
+
+        StringBuilder response = new StringBuilder();
+
+        this.list.sort(Comparator.comparing(
+                task -> (task instanceof Schedulable)
+                        ? ((Schedulable) task).getComparableDate()
+                        : LocalDateTime.MIN, // ToDos get Min → start of list
+                Comparator.reverseOrder()   // descending
+        ));
+
+        response.append("Quack! Here are your tasks sorted from the earliest:\n");
+        response.append(this.printList());
+        return response.toString();
     }
 
     /**

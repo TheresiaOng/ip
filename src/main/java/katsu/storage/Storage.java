@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
@@ -56,8 +55,8 @@ public class Storage {
                 tasks.add(new Deadline(taskDetails[2], dueDate), true);
                 break;
             case "E":
-                LocalDate startDate = DateUtils.convertStringToDate(taskDetails[3]);
-                LocalDate endDate = DateUtils.convertStringToDate(taskDetails[4]);
+                LocalDateTime startDate = DateUtils.convertStringToDateTime(taskDetails[3]);
+                LocalDateTime endDate = DateUtils.convertStringToDateTime(taskDetails[4]);
                 tasks.add(new Event(taskDetails[2], startDate, endDate), true);
                 break;
             default:

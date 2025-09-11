@@ -229,8 +229,8 @@ public class Katsu {
             return katsuResponse.toString();
         }
 
-        LocalDate startDate = DateUtils.convertStringToDate(newStartTime);
-        LocalDate endDate = DateUtils.convertStringToDate(newEndTime);
+        LocalDateTime startDate = DateUtils.convertStringToDateTime(newStartTime);
+        LocalDateTime endDate = DateUtils.convertStringToDateTime(newEndTime);
 
         return this.tasks.add(new Event(newTask, startDate, endDate), false);
     }
@@ -287,6 +287,20 @@ public class Katsu {
             return this.tasks.findKeyword(words[1]);
         } catch (ArrayIndexOutOfBoundsException e) {
             return "⚠ Quack! What do you want to find?";
+        }
+    }
+
+    public String handleSort(String... words) {
+        try {
+            if (words[1].equalsIgnoreCase("earliest")) {
+                return this.tasks.sortEarliest();
+            } else if (words[1].equalsIgnoreCase("latest")) {
+                return this.tasks.sortLatest();
+            } else {
+                return "⚠ Quack! Which way do you want to sort? (earliest/latest)";
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return "⚠ Quack! Which way do you want to sort? (earliest/latest)";
         }
     }
 }

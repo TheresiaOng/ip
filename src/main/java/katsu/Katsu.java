@@ -2,7 +2,6 @@ package katsu;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
@@ -229,8 +228,8 @@ public class Katsu {
             return katsuResponse.toString();
         }
 
-        LocalDate startDate = DateUtils.convertStringToDate(newStartTime);
-        LocalDate endDate = DateUtils.convertStringToDate(newEndTime);
+        LocalDateTime startDate = DateUtils.convertStringToDateTime(newStartTime);
+        LocalDateTime endDate = DateUtils.convertStringToDateTime(newEndTime);
 
         return this.tasks.add(new Event(newTask, startDate, endDate), false);
     }
@@ -287,6 +286,27 @@ public class Katsu {
             return this.tasks.findKeyword(words[1]);
         } catch (ArrayIndexOutOfBoundsException e) {
             return "⚠ Quack! What do you want to find?";
+        }
+    }
+
+    /**
+     * Handles the sort command by delegating to appropriate sorting methods.
+     * Supports sorting by "earliest" or "latest" criteria.
+     *
+     * @param words the command words containing the sort direction
+     * @return a formatted string with sorted tasks or an error message
+     */
+    public String handleSort(String... words) {
+        try {
+            if (words[1].equalsIgnoreCase("earliest")) {
+                return this.tasks.sortEarliest();
+            } else if (words[1].equalsIgnoreCase("latest")) {
+                return this.tasks.sortLatest();
+            } else {
+                return "⚠ Quack! Which way do you want to sort? (earliest/latest)";
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return "⚠ Quack! Which way do you want to sort? (earliest/latest)";
         }
     }
 }

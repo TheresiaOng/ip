@@ -29,6 +29,7 @@ public class Parser {
         case "event", "e" -> bot.addEvent(words);
         case "mark", "unmark" -> bot.handleMarking(words[0], words);
         case "find", "f" -> bot.handleFind(words);
+        case "sort" -> bot.handleSort(words);
         case "delete", "del" -> bot.handleDelete(words);
         case "bye" -> bot.deactivate();
         default -> "Quack, I don't know what that is... •᷄ɞ•";

@@ -9,7 +9,7 @@ import katsu.util.DateUtils;
  * Represents a task with a specific dueDate.
  * Extends the base Task class to include date and time information.
  */
-public class Deadline extends Task {
+public class Deadline extends Task implements Schedulable {
     private static final String LABEL = "[D]";
     private LocalDateTime dueDate;
 
@@ -46,5 +46,15 @@ public class Deadline extends Task {
     public String formatSave() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return "D | " + super.formatSave() + " | " + this.dueDate.format(formatter);
+    }
+
+    /**
+     * Returns the due date of the task for comparison and sorting purposes.
+     * This method allows the task to be sorted chronologically with other schedulable tasks.
+     *
+     * @return the LocalDateTime representing the task's due date
+     */
+    public LocalDateTime getComparableDate() {
+        return this.dueDate;
     }
 }

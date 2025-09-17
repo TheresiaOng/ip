@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import katsu.Katsu;
 import katsu.parser.Parser;
+import katsu.response.KatsuResponse;
 
 /**
  * Controller for the main GUI.
@@ -39,12 +40,13 @@ public class MainWindow extends AnchorPane {
      */
     @FXML
     public void initialize() {
+        dialogContainer.prefWidthProperty().bind(scrollPane.widthProperty().subtract(0));
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
 
         // show first bot message
         dialogContainer.getChildren().add(
                 DialogBox.getKatsuDialog("Hello! I'm Katsu ꒰ঌ( •ө• )໒꒱! What can I do for you?\n"
-                        + "(type \"help\" for the list of all commands available)", katsuImage));
+                        + "(type \"help\" for the list of all commands available)", katsuImage, "", ""));
     }
 
     /** Injects the Duke instance */
@@ -60,22 +62,27 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String katsuResponse = Parser.handleCommand(input, katsu);
+        KatsuResponse res = Parser.handleCommand(input, katsu);
 
-
-        if (katsuResponse != null && katsuResponse.equalsIgnoreCase("exit_application")) {
+        // Handle exit command
+        if ("exit_application".equalsIgnoreCase(res.getMessage())) {
             deactivate();
         }
 
-        if (katsuResponse != null) {
+        // Create dialog boxes
+        if (res.getMessage() != null) {
             DialogBox userDialog = DialogBox.getUserDialog(input, userImage);
-            DialogBox katsuDialog = DialogBox.getKatsuDialog(katsuResponse, katsuImage);
+
+            // Pass message, error, and user input
+            DialogBox katsuDialog = DialogBox.getKatsuDialog(
+                    res.getMessage(), katsuImage, res.getError(), res.getUserInput());
 
             dialogContainer.getChildren().addAll(userDialog, katsuDialog);
         }
 
         userInput.clear();
     }
+
 
     /**
      * Closes the application window.

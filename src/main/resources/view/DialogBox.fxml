@@ -4,19 +4,44 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 
-<fx:root alignment="TOP_RIGHT"
-         maxHeight="1.7976931348623157E308"
-         maxWidth="1.7976931348623157E308"
-         prefWidth="400.0"
-         spacing="10"
-         type="javafx.scene.layout.HBox"
-         xmlns="http://javafx.com/javafx/17"
-         xmlns:fx="http://javafx.com/fxml/1">
+<fx:root alignment="TOP_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="400.0" spacing="10" stylesheets="@../css/dialog-box.css" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+
     <children>
-        <Label fx:id="dialog" text="Label" wrapText="true" minHeight="-Infinity"/>
-        <ImageView fx:id="displayPicture" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" />
+        <!-- VBox for dialog and error lines -->
+        <VBox spacing="5">
+            <!-- Main dialog message -->
+            <Label fx:id="dialog" minHeight="-Infinity" text="Label" wrapText="true" styleClass="message">
+                <VBox.margin>
+                    <Insets left="7.0" right="7.0" />
+                </VBox.margin>
+                <padding>
+                    <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                </padding></Label>
+
+            <!-- Grouped bubble -->
+            <VBox fx:id="extraBox" managed="false" spacing="3" visible="false" styleClass="message">
+                <Label fx:id="errorMessage" textFill="#942b2b" wrapText="true" />
+                <Label fx:id="userInput" textFill="#454545" wrapText="true" />
+            <VBox.margin>
+               <Insets left="7.0" right="7.0" />
+            </VBox.margin>
+            <padding>
+               <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+            </padding>
+            </VBox>
+        </VBox>
+
+        <!-- User's display picture -->
+        <ImageView fx:id="displayPicture" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="false">
+            <clip>
+                <Circle centerX="30" centerY="30" radius="30" />
+            </clip>
+        </ImageView>
     </children>
+
     <padding>
         <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
     </padding>

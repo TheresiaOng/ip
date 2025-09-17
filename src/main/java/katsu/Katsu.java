@@ -232,15 +232,19 @@ public class Katsu {
         }
 
         try {
-            // Convert strings to LocalDateTime
             LocalDateTime startDate = DateUtils.convertStringToDateTime(newStartTime);
             LocalDateTime endDate = DateUtils.convertStringToDateTime(newEndTime);
 
-            // Add event and return success
+            if (!startDate.isBefore(endDate)) {
+                // start is equal or after end → invalid
+                return new ErrorResponse(input,
+                        "⚠ Quack! The event's start time must be before the end time.");
+            }
+
             return new SuccessResponse("", this.tasks.add(new Event(newTask, startDate, endDate), false));
         } catch (DateTimeParseException e) {
             return new ErrorResponse(input,
-                    "⚠ Quack! That does not look like a valid ate... •᷄ɞ•\n"
+                    "⚠ Quack! That does not look like a valid date... •᷄ɞ•\n"
                             + "Please use the format yyyy-MM-dd HH:mm");
         }
     }

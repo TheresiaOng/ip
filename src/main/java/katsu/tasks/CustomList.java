@@ -2,10 +2,17 @@ package katsu.tasks;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import katsu.response.ErrorResponse;
+import katsu.response.KatsuResponse;
+import katsu.response.SuccessResponse;
 
 /**
  * Represents a custom list implementation for managing Task objects.
@@ -54,38 +61,67 @@ public class CustomList {
      *
      * @param id the string representation of the task number (1-based index)
      */
-    public String markCompleted(String id) {
-        int index = Integer.parseInt(id) - 1;
-        assert index >= 0 : "index should be >= 0";
+    public KatsuResponse markCompleted(String id, String userInput) {
+        int index;
+        try {
+            index = Integer.parseInt(id) - 1;
+        } catch (NumberFormatException e) {
+            return new ErrorResponse(userInput, "⚠ Quack! That does not look like a number... •᷄ɞ•");
+        }
 
-        StringBuilder response = new StringBuilder();
+        if (index < 0 || index >= this.list.size()) {
+            return new ErrorResponse(userInput, "⚠ Quack! You do not have that task number.");
+        }
 
         Task currTask = this.list.get(index);
+
+        if (currTask.isComplete()) {
+            return new ErrorResponse(userInput,
+                    "⚠ Quack! This task is already completed:\n"
+                            + currTask.printTask()
+                            + "\nPerhaps you want to use \"unmark\" or \"delete\" on this task?");
+        }
+
         currTask.markCompleted();
 
-        response.append("Quack! I have  marked this task as done:\n");
-        response.append(currTask.printTask());
-        return response.toString();
+        return new SuccessResponse(userInput,
+                "Quack! I have marked this task as completed:\n"
+                        + currTask.printTask());
     }
+
 
     /**
      * Marks a task as uncompleted based on its position in the list.
      *
      * @param id the string representation of the task number (1-based index)
      */
-    public String markUncompleted(String id) {
-        int index = Integer.parseInt(id) - 1;
-        assert index >= 0 : "index should be >= 0";
+    public KatsuResponse markUncompleted(String id, String userInput) {
+        int index;
+        try {
+            index = Integer.parseInt(id) - 1;
+        } catch (NumberFormatException e) {
+            return new ErrorResponse(userInput, "⚠ Quack! That does not look like a number... •᷄ɞ•");
+        }
 
-        StringBuilder response = new StringBuilder();
+        if (index < 0 || index >= this.list.size()) {
+            return new ErrorResponse(userInput, "⚠ Quack! You do not have that task number.");
+        }
 
         Task currTask = this.list.get(index);
+
+        if (!currTask.isComplete()) {
+            return new ErrorResponse(userInput,
+                    "⚠ Quack! This task is not completed yet:\n"
+                            + currTask.printTask() + "\nPerhaps you want to use \"mark\" or \"delete\" on this task?");
+        }
+
         currTask.markUncompleted();
 
-        response.append("Quack! I have  marked this task as not done yet:\n");
-        response.append(currTask.printTask());
-        return response.toString();
+        return new SuccessResponse(userInput,
+                "Quack! I have marked this task as not done yet:\n"
+                        + currTask.printTask());
     }
+
 
     /**
      * Removes a task from the list based on its position and provides user feedback.
@@ -130,28 +166,36 @@ public class CustomList {
     /**
      * Searches for tasks containing a specific keyword and displays matching results.
      *
-     * @param word the keyword to search for in task descriptions
+     * @param words the keywords to search for in task descriptions
      */
-    public String findKeyword(String word) {
+    public String findKeyword(String... words) {
         if (this.list.isEmpty()) {
             return "Quack! You have no tasks in your list.";
         }
 
-        CustomList newList = new CustomList();
-        StringBuilder response = new StringBuilder();
+        Set<Task> matchedTasks = new LinkedHashSet<>(); // automatically removes duplicates
 
-        this.list.stream()
-                .filter((task) -> task.hasKeyword(word))
-                .forEach((task) -> newList.add(task, true));
+        Arrays.stream(words)
+                .distinct()
+                .forEach(word -> this.list.stream()
+                        .filter(task -> task.hasKeyword(word))
+                        .forEach(task -> matchedTasks.add(task)));
 
-        if (newList.isEmpty()) {
+        if (matchedTasks.isEmpty()) {
             return "Quack! No task description matches.";
-        } else {
-            response.append("Quack! Here are the matching tasks in your list:\n");
-            response.append(newList.printList());
-            return response.toString();
         }
+
+        // Add unique tasks to the new list
+        CustomList newList = new CustomList();
+        matchedTasks.forEach(task -> newList.add(task, true));
+
+        StringBuilder response = new StringBuilder();
+        response.append("Quack! Here are the matching tasks in your list:\n");
+        response.append(newList.printList());
+
+        return response.toString();
     }
+
 
     /**
      * Sorts tasks from earliest to latest date and returns a formatted response.

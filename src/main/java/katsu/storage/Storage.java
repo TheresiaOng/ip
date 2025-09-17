@@ -65,7 +65,7 @@ public class Storage {
             }
 
             if (taskDetails[1].equals("1")) {
-                tasks.markCompleted(String.valueOf(index + 1));
+                tasks.markCompleted(String.valueOf(index + 1), "");
             }
 
             index++;

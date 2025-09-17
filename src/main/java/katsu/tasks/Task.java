@@ -36,6 +36,15 @@ public abstract class Task {
     }
 
     /**
+     * Show the task status as complete or uncomplete.
+     *
+     * @return true if completed, false otherwise.
+     */
+    public boolean isComplete() {
+        return this.isComplete;
+    }
+
+    /**
      * Returns a formatted string representation of the description for display purposes.
      * The format includes a checkbox indicator and the description.
      *

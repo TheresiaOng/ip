@@ -3,6 +3,7 @@ package katsu;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -125,11 +126,12 @@ public class Katsu {
      * @param words Array of user input words for the task.
      */
     public KatsuResponse addToDo(String... words) {
-        // join words from index 1 until array length to get task
-        String newTask = String.join(" ", Arrays.stream(words).skip(1).toArray(String[]::new));
+        String newTask = String.join(" ", Arrays.stream(words).skip(1).toArray(String[]::new))
+                .replaceAll("\\s+", " ").trim();
 
         if (newTask.isEmpty()) {
-            return new ErrorResponse(Arrays.toString(words), "⚠ Quack! You're missing the todo's description.");
+            String userInput = String.join(" ", words).trim();
+            return new ErrorResponse(userInput, "⚠ Quack! You're missing the todo's description.");
         }
 
         return new SuccessResponse("", this.tasks.add(new ToDo(newTask), false));
@@ -141,27 +143,42 @@ public class Katsu {
      * @param words Array of user input words for the task.
      */
     public KatsuResponse addDeadline(String... words) {
+        // Normalize redundant spaces in each word and rebuild
+        String input = String.join(" ", words)
+                .trim()
+                .replaceAll("\\s+", " "); // collapse multiple spaces
+
+        // Split normalized input back into array
+        String[] cleanedWords = input.split(" ");
+
         String newTask;
         String newDeadline;
-        int byPosition = Parser.findWord(words, "/by", -1);
+        int byPosition = Parser.findWord(cleanedWords, "/by", -1);
 
         newTask = (byPosition == -1)
-                ? String.join(" ", Arrays.copyOfRange(words, 1, words.length))
-                : String.join(" ", Arrays.copyOfRange(words, 1, byPosition));
+                ? String.join(" ", Arrays.copyOfRange(cleanedWords, 1, cleanedWords.length))
+                : String.join(" ", Arrays.copyOfRange(cleanedWords, 1, byPosition));
 
         if (newTask.isEmpty()) {
-            return new ErrorResponse(Arrays.toString(words), "⚠ Quack! You're missing the deadline's description.");
+            return new ErrorResponse(input,
+                    "⚠ Quack! You're missing the deadline's description.");
         }
 
-        if (byPosition == -1 || byPosition + 1 >= words.length) {
-            return new ErrorResponse(Arrays.toString(words),
+        if (byPosition == -1 || byPosition + 1 >= cleanedWords.length) {
+            return new ErrorResponse(input,
                     "⚠ Quack! You're missing the deadline.\n(use '/by' followed by the deadline).");
         }
 
-        newDeadline = String.join(" ", Arrays.copyOfRange(words, byPosition + 1, words.length));
-        LocalDateTime deadline = DateUtils.convertStringToDateTime(newDeadline);
+        newDeadline = String.join(" ", Arrays.copyOfRange(cleanedWords, byPosition + 1, cleanedWords.length));
 
-        return new SuccessResponse("", this.tasks.add(new Deadline(newTask, deadline), false));
+        try {
+            LocalDateTime deadline = DateUtils.convertStringToDateTime(newDeadline);
+            return new SuccessResponse("", this.tasks.add(new Deadline(newTask, deadline), false));
+        } catch (DateTimeParseException e) {
+            return new ErrorResponse(input,
+                    "⚠ Quack! That does not look like a valid date... •᷄ɞ•\n"
+                            + "Please use the format yyyy-MM-dd HH:mm");
+        }
     }
 
     /**
@@ -170,53 +187,62 @@ public class Katsu {
      * @param words Array of user input words for the task.
      */
     public KatsuResponse addEvent(String... words) {
-        int fromPos = Parser.findWord(words, "/from", -1);
-        int toPos = Parser.findWord(words, "/to", fromPos + 1);
+        String input = String.join(" ", words).trim().replaceAll("\\s+", " ");
+        String[] cleanedWords = input.split(" ");
+
+        int fromPos = Parser.findWord(cleanedWords, "/from", -1);
+        int toPos = Parser.findWord(cleanedWords, "/to", fromPos + 1);
 
         // Extract task description
         String newTask = (fromPos == -1)
-                ? String.join(" ", Arrays.copyOfRange(words, 1, words.length))
-                : String.join(" ", Arrays.copyOfRange(words, 1, fromPos));
+                ? String.join(" ", Arrays.copyOfRange(cleanedWords, 1, cleanedWords.length))
+                : String.join(" ", Arrays.copyOfRange(cleanedWords, 1, fromPos));
 
         if (newTask.isEmpty()) {
-            return new ErrorResponse(Arrays.toString(words),
+            return new ErrorResponse(input,
                     "⚠ Quack! You're missing the event's description.\n");
         }
 
-        if (fromPos == -1 || fromPos + 1 >= words.length) {
-            return new ErrorResponse(Arrays.toString(words),
+        if (fromPos == -1 || fromPos + 1 >= cleanedWords.length) {
+            return new ErrorResponse(input,
                     "⚠ Quack! You're missing the event's starting time.\n(use '/from' followed by the start time).");
         }
 
         // Extract start time
         String newStartTime = (toPos == -1)
-                ? String.join(" ", Arrays.copyOfRange(words, fromPos + 1, words.length))
-                : String.join(" ", Arrays.copyOfRange(words, fromPos + 1, toPos));
+                ? String.join(" ", Arrays.copyOfRange(cleanedWords, fromPos + 1, cleanedWords.length))
+                : String.join(" ", Arrays.copyOfRange(cleanedWords, fromPos + 1, toPos));
 
         if (newStartTime.isEmpty()) {
-            return new ErrorResponse(Arrays.toString(words),
+            return new ErrorResponse(input,
                     "⚠ Quack! You're missing the event's starting time.\n(use '/from' followed by the start time).");
         }
 
-        if (toPos == -1 || toPos + 1 >= words.length) {
-            return new ErrorResponse(Arrays.toString(words),
+        if (toPos == -1 || toPos + 1 >= cleanedWords.length) {
+            return new ErrorResponse(input,
                     "⚠ Quack! You're missing the event's ending time.\n(use '/to' followed by the end time).");
         }
 
         // Extract end time
-        String newEndTime = String.join(" ", Arrays.copyOfRange(words, toPos + 1, words.length));
+        String newEndTime = String.join(" ", Arrays.copyOfRange(cleanedWords, toPos + 1, cleanedWords.length));
 
         if (newEndTime.isEmpty()) {
-            return new ErrorResponse(Arrays.toString(words),
+            return new ErrorResponse(input,
                     "⚠ Quack! You're missing the event's ending time.\n(use '/to' followed by the end time).");
         }
 
-        // Convert strings to LocalDateTime
-        LocalDateTime startDate = DateUtils.convertStringToDateTime(newStartTime);
-        LocalDateTime endDate = DateUtils.convertStringToDateTime(newEndTime);
+        try {
+            // Convert strings to LocalDateTime
+            LocalDateTime startDate = DateUtils.convertStringToDateTime(newStartTime);
+            LocalDateTime endDate = DateUtils.convertStringToDateTime(newEndTime);
 
-        // Add event and return success
-        return new SuccessResponse("", this.tasks.add(new Event(newTask, startDate, endDate), false));
+            // Add event and return success
+            return new SuccessResponse("", this.tasks.add(new Event(newTask, startDate, endDate), false));
+        } catch (DateTimeParseException e) {
+            return new ErrorResponse(input,
+                    "⚠ Quack! That does not look like a valid ate... •᷄ɞ•\n"
+                            + "Please use the format yyyy-MM-dd HH:mm");
+        }
     }
 
     /**
@@ -227,19 +253,22 @@ public class Katsu {
      * @param words Array of user input words for the task.
      */
     public KatsuResponse handleMarking(String command, String... words) {
+        String input = String.join(" ", words).trim().replaceAll("\\s+", " ");
+        String[] cleanedWords = input.split(" ");
+
         try {
-            String taskNum = words[1];
+            String taskNum = cleanedWords[1];
             if (Objects.equals(command, "mark")) {
-                return new SuccessResponse("", this.tasks.markCompleted(taskNum));
+                return this.tasks.markCompleted(taskNum, input);
             } else {
-                return new SuccessResponse("", this.tasks.markUncompleted(taskNum));
+                return this.tasks.markUncompleted(taskNum, input);
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            return new ErrorResponse(Arrays.toString(words), "⚠ Quack! You forgot the task number.");
+            return new ErrorResponse(input, "⚠ Quack! You forgot the task number.");
         } catch (NumberFormatException e) {
-            return new ErrorResponse(Arrays.toString(words), "⚠ Quack! That does not look like a number... •᷄ɞ•");
+            return new ErrorResponse(input, "⚠ Quack! That does not look like a number... •᷄ɞ•");
         } catch (IndexOutOfBoundsException e) {
-            return new ErrorResponse(Arrays.toString(words), "⚠ Quack! You do not have that task number.");
+            return new ErrorResponse(input, "⚠ Quack! You do not have that task number.");
         }
     }
 
@@ -249,15 +278,18 @@ public class Katsu {
      * @param words Array of user input words for the task.
      */
     public KatsuResponse handleDelete(String... words) {
+        String input = String.join(" ", words).trim().replaceAll("\\s+", " ");
+        String[] cleanedWords = input.split(" ");
+
         try {
-            String taskNum = words[1];
+            String taskNum = cleanedWords[1];
             return new SuccessResponse("", this.tasks.deleteTask(taskNum));
         } catch (ArrayIndexOutOfBoundsException e) {
-            return new ErrorResponse(Arrays.toString(words), "⚠ Quack! You forgot the task number.");
+            return new ErrorResponse(input, "⚠ Quack! You forgot the task number.");
         } catch (NumberFormatException e) {
-            return new ErrorResponse(Arrays.toString(words), "⚠ Quack! That does not look like a number... •᷄ɞ•");
+            return new ErrorResponse(input, "⚠ Quack! That does not look like a number... •᷄ɞ•");
         } catch (IndexOutOfBoundsException e) {
-            return new ErrorResponse(Arrays.toString(words), "⚠ Quack! You do not have that task number.");
+            return new ErrorResponse(input, "⚠ Quack! You do not have that task number.");
         }
     }
 
@@ -267,10 +299,13 @@ public class Katsu {
      * @param words array of user input words containing the search keyword
      */
     public KatsuResponse handleFind(String... words) {
+        String input = String.join(" ", words).trim().replaceAll("\\s+", " ");
+        String[] cleanedWords = input.split(" ");
+
         try {
-            return new SuccessResponse("", this.tasks.findKeyword(words[1]));
+            return new SuccessResponse("", this.tasks.findKeyword(cleanedWords));
         } catch (ArrayIndexOutOfBoundsException e) {
-            return new ErrorResponse(Arrays.toString(words), "⚠ Quack! What do you want to find?");
+            return new ErrorResponse(input, "⚠ Quack! What do you want to find?");
         }
     }
 
@@ -282,17 +317,20 @@ public class Katsu {
      * @return a formatted string with sorted tasks or an error message
      */
     public KatsuResponse handleSort(String... words) {
+        String input = String.join(" ", words).trim().replaceAll("\\s+", " ");
+        String[] cleanedWords = input.split(" ");
+
         try {
-            if (words[1].equalsIgnoreCase("earliest")) {
+            if (cleanedWords[1].equalsIgnoreCase("earliest")) {
                 return new SuccessResponse("", this.tasks.sortEarliest());
-            } else if (words[1].equalsIgnoreCase("latest")) {
+            } else if (cleanedWords[1].equalsIgnoreCase("latest")) {
                 return new SuccessResponse("", this.tasks.sortLatest());
             } else {
-                return new ErrorResponse(Arrays.toString(words),
+                return new ErrorResponse(input,
                         "⚠ Quack! Which way do you want to sort? (earliest/latest)");
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            return new ErrorResponse(Arrays.toString(words),
+            return new ErrorResponse(input,
                     "⚠ Quack! Which way do you want to sort? (earliest/latest)");
         }
     }

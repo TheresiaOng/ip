@@ -5,7 +5,7 @@
 Katsu is your personal assistant that lets you keep track of your daily and future tasks! ˗ˏˋ𓅭ˎˊ˗
 
 ## Features 🚀
-### 🗓 ️Todo, Event, Deadline
+### 🗓 Todo, Event, Deadline
 
 Add different tasks easily using `todo`, `event`, or `deadline` commands.
 
@@ -36,7 +36,7 @@ Katsu will mark the specified task in your task list.
 Here'a an example outcome if you were to run `mark 1`:
 ```
 Quack! I have marked this task as completed:
-[T][X] read book
+[T][X] Read book
 ```
 
 
@@ -52,7 +52,7 @@ Katsu will remove the specified task from your task list.
 Here's an example outcome if you were to run `delete 1`:
 ```
 Quack! I've removed the task below from your list:
-[T][X] read book
+[T][X] Read book
 You have no more task in the list.
 ```
 
@@ -68,8 +68,8 @@ Katsu will display all tasks that match your search term.
 Here's an example outcome if you were to run `find book`:
 ```
 Quack! Here are the matching tasks in your list:
-1.[T][ ] read book
-2.[T][X] return library book
+1.[T][ ] Read book
+2.[T][X] Return library book
 ```
 
 ### 💾 Save
@@ -82,7 +82,7 @@ The application automatically loads your saved tasks when you start it up again.
 
 1. Ensure you have Java-17 downloaded 
 2. Download the latest version of Katsu
-3. Run the jar file using java -jar katsu.jar 
+3. Run the jar file using `java -jar katsu.jar `
 4. Type your commands and press Enter to execute them 
 5. Type `bye` to exit the application
 

@@ -1,30 +1,91 @@
-# Duke User Guide
+# Katsu User Guide
 
-// Update the title above to match the actual product name
+![Katsu](Ui.png)
 
-// Product screenshot goes here
+Katsu is your personal assistant that lets you keep track of your daily and future tasks! ˗ˏˋ𓅭ˎˊ˗
 
-// Product intro goes here
+## Features 🚀
+### 🗓 ️Todo, Event, Deadline
 
-## Adding deadlines
+Add different tasks easily using `todo`, `event`, or `deadline` commands.
 
-// Describe the action and its outcome.
+Example: 
+- `todo <task's description>`
+- `deadline <deadline's description> /by <yyyy-MM-dd HH:mm>`
+- `event <event's description> /from <yyyy-MM-dd HH:mm> /to <yyyy-MM-dd HH:mm>`
 
-// Give examples of usage
+Katsu will add the specified tasks into your task list so you can easily keep track of them!
 
-Example: `keyword (optional arguments)`
-
-// A description of the expected outcome goes here
-
+Here's an example outcome if you were to run `todo Read book`:
 ```
-expected output
+Quack! I've added the task below to your list:
+[T][ ] Read book
+You now have 1 task in the list.
 ```
 
-## Feature ABC
+### ✅ Mark and Unmark
 
-// Feature details
+Mark tasks as completed or unmark them using `mark` and `unmark` command.
+
+Example:
+- `mark <task's number>`
+- `unmark <task's number>`
+
+Katsu will mark the specified task in your task list.
+
+Here'a an example outcome if you were to run `mark 1`:
+```
+Quack! I have marked this task as completed:
+[T][X] read book
+```
 
 
-## Feature XYZ
+### 🗑️ Delete
 
-// Feature details
+Remove tasks from your list using the `delete` command.
+
+Example:
+- `delete <task's number>`
+
+Katsu will remove the specified task from your task list.
+
+Here's an example outcome if you were to run `delete 1`:
+```
+Quack! I've removed the task below from your list:
+[T][X] read book
+You have no more task in the list.
+```
+
+### 🔍 Find
+
+Search for tasks containing specific keywords using the find command.
+
+Example:
+- `find <keywords>`
+
+Katsu will display all tasks that match your search term.
+
+Here's an example outcome if you were to run `find book`:
+```
+Quack! Here are the matching tasks in your list:
+1.[T][ ] read book
+2.[T][X] return library book
+```
+
+### 💾 Save
+
+You tasks will be saved when you close the window or run the command `bye` which will also close the window!
+
+The application automatically loads your saved tasks when you start it up again.
+
+## Getting Started
+
+1. Ensure you have Java-11 or above installed 
+2. Download the latest version of Katsu
+3. Run the jar file using java -jar katsu.jar 
+4. Type your commands and press Enter to execute them 
+5. Type `bye` to exit the application
+
+## Support
+
+If you encounter any issues or have questions, please contact our support team. Happy task managing! ˗ˏˋ𓅭ˎˊ˗

@@ -80,7 +80,7 @@ The application automatically loads your saved tasks when you start it up again.
 
 ## Getting Started
 
-1. Ensure you have Java-11 or above installed 
+1. Ensure you have Java-17 downloaded 
 2. Download the latest version of Katsu
 3. Run the jar file using java -jar katsu.jar 
 4. Type your commands and press Enter to execute them 

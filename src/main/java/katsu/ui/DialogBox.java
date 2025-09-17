@@ -1,5 +1,6 @@
 package katsu.ui;
 
+import java.awt.*;
 import java.io.IOException;
 
 import javafx.collections.FXCollections;
@@ -8,10 +9,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 /**
  * Represents a dialog box consisting of an ImageView to represent the speaker's face
@@ -22,6 +24,12 @@ public class DialogBox extends HBox {
     private Label dialog;
     @FXML
     private ImageView displayPicture;
+    @FXML
+    private VBox extraBox;
+    @FXML
+    private Label errorMessage;
+    @FXML
+    private Label userInput;
 
     /**
      * Constructs a DialogBox with the specified text and image.
@@ -29,7 +37,7 @@ public class DialogBox extends HBox {
      * @param text the dialog text to display
      * @param img the speaker's profile image
      */
-    public DialogBox(String text, Image img) {
+    public DialogBox(String text, Image img, String err, String userText) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/view/DialogBox.fxml"));
             fxmlLoader.setController(this);
@@ -41,6 +49,26 @@ public class DialogBox extends HBox {
 
         dialog.setText(text);
         displayPicture.setImage(img);
+
+        if (err != null && !err.isEmpty()) {
+            errorMessage.setText(err);
+            errorMessage.setVisible(true);
+            dialog.setManaged(false);
+
+            if (userText != null && !userText.isEmpty()) {
+                userInput.setText("Your input: " + userText);
+                userInput.setVisible(true);
+            } else {
+                userInput.setVisible(false);
+            }
+
+            extraBox.setVisible(true);
+            extraBox.setManaged(true);
+        } else {
+            extraBox.setVisible(false);
+            extraBox.setManaged(false);
+            dialog.setManaged(true);
+        }
     }
 
     /**
@@ -51,6 +79,8 @@ public class DialogBox extends HBox {
         ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
         FXCollections.reverse(tmp);
         this.getChildren().setAll(tmp);
+        dialog.getStyleClass().add("reply-label");
+        extraBox.getStyleClass().add("reply-label");
     }
 
     /**
@@ -61,7 +91,7 @@ public class DialogBox extends HBox {
      * @return a DialogBox configured for user messages
      */
     public static DialogBox getUserDialog(String s, Image i) {
-        return new DialogBox(s, i);
+        return new DialogBox(s, i, "", "");
     }
 
     /**
@@ -71,8 +101,8 @@ public class DialogBox extends HBox {
      * @param i Katsu's profile image
      * @return a DialogBox configured for Katsu messages
      */
-    public static DialogBox getKatsuDialog(String s, Image i) {
-        var db = new DialogBox(s, i);
+    public static DialogBox getKatsuDialog(String s, Image i, String e, String u) {
+        var db = new DialogBox(s, i, e, u);
         db.flip();
         return db;
     }

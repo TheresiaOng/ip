@@ -1,0 +1,44 @@
+.message {
+    -fx-background-color: linear-gradient(to bottom right, #d1982e, #d1982e);
+    -fx-border-color: #bd5417 #bd5417 #bd5417 #bd5417;
+    -fx-border-width: 2px;
+    -fx-background-radius: 1em 1em 0 1em;
+    -fx-border-radius: 1em 1em 0 1em;
+}
+
+.reply-label {
+    -fx-background-radius: 1em 1em 1em 0;
+    -fx-border-radius: 1em 1em 1em 0;
+}
+
+.text-flow {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 10;
+    -fx-padding: 6;
+}
+
+#displayPicture {
+    /* Shadow effect on image. */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 5, 5);
+
+    /* Change size of image. */
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+
+    /* Rotate image clockwise by degrees. */
+    -fx-rotate: 0;
+}
+
+/* Error line inside bubble */
+#errorMessage {
+    -fx-font-size: 12px;
+    -fx-font-family: Verdana;
+    -fx-text-fill: #942b2b;
+    -fx-font-weight: bold;
+}
+
+/* User input line inside bubble */
+#userInput {
+    -fx-font-size: 12px;
+    -fx-text-fill: #454545;
+}

@@ -1,6 +1,8 @@
 package katsu.parser;
 
 import katsu.Katsu;
+import katsu.response.ErrorResponse;
+import katsu.response.KatsuResponse;
 
 /**
  * Handles parsing and processing of user commands for the Katsu application.
@@ -14,7 +16,7 @@ public class Parser {
      * @param order the full command string entered by the user
      * @param bot the Katsu bot instance to execute commands on
      */
-    public static String handleCommand(String order, Katsu bot) {
+    public static KatsuResponse handleCommand(String order, Katsu bot) {
         if (order.isBlank()) {
             return null;
         }
@@ -32,7 +34,7 @@ public class Parser {
         case "sort" -> bot.handleSort(words);
         case "delete", "del" -> bot.handleDelete(words);
         case "bye" -> bot.deactivate();
-        default -> "Quack, I don't know what that is... •᷄ɞ•";
+        default -> new ErrorResponse(order, "Quack, I don't know what that is... •᷄ɞ•");
         };
     }
 

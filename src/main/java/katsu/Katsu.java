@@ -99,7 +99,7 @@ public class Katsu {
             return katsuResponse;
         }
 
-        return new SuccessResponse("" ,"exit_application");
+        return new SuccessResponse("", "exit_application");
 
     }
 
@@ -237,9 +237,9 @@ public class Katsu {
         } catch (ArrayIndexOutOfBoundsException e) {
             return new ErrorResponse(Arrays.toString(words), "⚠ Quack! You forgot the task number.");
         } catch (NumberFormatException e) {
-            return new ErrorResponse(Arrays.toString(words),"⚠ Quack! That does not look like a number... •᷄ɞ•");
+            return new ErrorResponse(Arrays.toString(words), "⚠ Quack! That does not look like a number... •᷄ɞ•");
         } catch (IndexOutOfBoundsException e) {
-            return new ErrorResponse(Arrays.toString(words),"⚠ Quack! You do not have that task number.");
+            return new ErrorResponse(Arrays.toString(words), "⚠ Quack! You do not have that task number.");
         }
     }
 
@@ -255,9 +255,9 @@ public class Katsu {
         } catch (ArrayIndexOutOfBoundsException e) {
             return new ErrorResponse(Arrays.toString(words), "⚠ Quack! You forgot the task number.");
         } catch (NumberFormatException e) {
-            return new ErrorResponse(Arrays.toString(words),"⚠ Quack! That does not look like a number... •᷄ɞ•");
+            return new ErrorResponse(Arrays.toString(words), "⚠ Quack! That does not look like a number... •᷄ɞ•");
         } catch (IndexOutOfBoundsException e) {
-            return new ErrorResponse(Arrays.toString(words),"⚠ Quack! You do not have that task number.");
+            return new ErrorResponse(Arrays.toString(words), "⚠ Quack! You do not have that task number.");
         }
     }
 

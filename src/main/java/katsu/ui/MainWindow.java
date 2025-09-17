@@ -11,8 +11,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import katsu.Katsu;
-import katsu.response.KatsuResponse;
 import katsu.parser.Parser;
+import katsu.response.KatsuResponse;
 
 /**
  * Controller for the main GUI.
@@ -75,11 +75,7 @@ public class MainWindow extends AnchorPane {
 
             // Pass message, error, and user input
             DialogBox katsuDialog = DialogBox.getKatsuDialog(
-                    res.getMessage(),
-                    katsuImage,
-                    res.getError(),       // error string (empty if no error)
-                    res.getUserInput()    // user input for context
-            );
+                    res.getMessage(), katsuImage, res.getError(), res.getUserInput());
 
             dialogContainer.getChildren().addAll(userDialog, katsuDialog);
         }

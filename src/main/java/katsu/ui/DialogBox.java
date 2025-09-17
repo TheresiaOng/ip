@@ -1,6 +1,5 @@
 package katsu.ui;
 
-import java.awt.*;
 import java.io.IOException;
 
 import javafx.collections.FXCollections;
@@ -9,10 +8,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 /**
@@ -36,6 +35,8 @@ public class DialogBox extends HBox {
      *
      * @param text the dialog text to display
      * @param img the speaker's profile image
+     * @param err error message if exists
+     * @param userText the user's input command
      */
     public DialogBox(String text, Image img, String err, String userText) {
         try {

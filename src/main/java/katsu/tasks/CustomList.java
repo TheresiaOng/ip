@@ -216,7 +216,7 @@ public class CustomList {
                         ? ((Schedulable) task).getComparableDate()
                         : LocalDateTime.MIN));
 
-        response.append("Quack! Here are your tasks sorted from the latest:\n");
+        response.append("Quack! Here are your tasks sorted from the earliest:\n");
         response.append(this.printList());
         return response.toString();
     }
@@ -240,7 +240,7 @@ public class CustomList {
                         ? ((Schedulable) task).getComparableDate()
                         : LocalDateTime.MIN, Comparator.reverseOrder()));
 
-        response.append("Quack! Here are your tasks sorted from the earliest:\n");
+        response.append("Quack! Here are your tasks sorted from the latest:\n");
         response.append(this.printList());
         return response.toString();
     }

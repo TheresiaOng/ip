@@ -42,6 +42,7 @@ public class MainWindow extends AnchorPane {
     public void initialize() {
         dialogContainer.prefWidthProperty().bind(scrollPane.widthProperty().subtract(0));
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        scrollPane.setFitToWidth(true);
 
         // show first bot message
         dialogContainer.getChildren().add(

@@ -35,7 +35,7 @@
         </VBox>
 
         <!-- User's display picture -->
-        <ImageView fx:id="displayPicture" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="false">
+        <ImageView fx:id="displayPicture" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
             <clip>
                 <Circle centerX="30" centerY="30" radius="30" />
             </clip>

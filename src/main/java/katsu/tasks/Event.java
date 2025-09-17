@@ -1,6 +1,7 @@
 package katsu.tasks;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import katsu.util.DateUtils;
 
@@ -46,7 +47,8 @@ public class Event extends Task implements Schedulable {
      */
     @Override
     public String formatSave() {
-        return "E | " + super.formatSave() + " | " + this.startDate + " | " + this.endDate;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return "E | " + super.formatSave() + " | " + this.startDate.format(formatter) + " | " + this.endDate.format(formatter);
     }
 
     /**

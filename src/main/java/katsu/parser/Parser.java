@@ -18,7 +18,7 @@ public class Parser {
      */
     public static KatsuResponse handleCommand(String order, Katsu bot) {
         if (order.isBlank()) {
-            return null;
+            return new ErrorResponse("", "⚠ Quack! Please type a command.");
         }
 
         String[] words = order.strip().split(" ");

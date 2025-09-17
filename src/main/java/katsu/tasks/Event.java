@@ -48,7 +48,8 @@ public class Event extends Task implements Schedulable {
     @Override
     public String formatSave() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return "E | " + super.formatSave() + " | " + this.startDate.format(formatter) + " | " + this.endDate.format(formatter);
+        return "E | " + super.formatSave() + " | "
+                + this.startDate.format(formatter) + " | " + this.endDate.format(formatter);
     }
 
     /**

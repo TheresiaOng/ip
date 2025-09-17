@@ -61,6 +61,7 @@ public class DialogBox extends HBox {
                 userInput.setVisible(true);
             } else {
                 userInput.setVisible(false);
+                userInput.setManaged(false);
             }
 
             extraBox.setVisible(true);

@@ -72,7 +72,7 @@ public class Katsu {
         StringBuilder text = new StringBuilder();
 
         text.append("Here are some commands you could use ꒰ঌ( •ө• )໒꒱:\n");
-        text.append("1. lists (to show all of your tasks)\n");
+        text.append("1. list (to show all of your tasks)\n");
         text.append("2. todo <description> (to add a todo to your task list)\n");
         text.append("3. deadline <description> /by <yyyy-MM-dd HH:mm>"
                 + "(to add a deadline to your task list)\n");

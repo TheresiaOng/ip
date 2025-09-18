@@ -1,47 +1,91 @@
-# Katsu
-> “Your mind is for having ideas, not holding them.” – David Allen [source](https://dansilvestre.com/productivity-quotes)
+# Katsu User Guide
 
-Your pesonal assistant that lets you keep track of your daily and future tasks! 🚀
+![Katsu](docs/Ui.png)
 
-**Katsu** is:
-* Text-based
-* Easy to learn
-* ~~Fast~~ *SUPER FAST* to use!
+Katsu is your personal assistant that lets you keep track of your daily and future tasks! ˗ˏˋ𓅭ˎˊ˗
 
-## Downloading Katsu
+## Features 🚀
+### 🗓 Todo, Event, Deadline
 
-1. Download .jar file from [here](https://github.com/TheresiaOng/ip/releases/tag/A-Jar)
-2. Double-click it!
-3. Add your tasks
-4. Let it manage your tasks for you!
+Add different tasks easily using `todo`, `event`, or `deadline` commands.
 
-## Features
+Example:
+- `todo <task's description>`
+- `deadline <deadline's description> /by <yyyy-MM-dd HH:mm>`
+- `event <event's description> /from <yyyy-MM-dd HH:mm> /to <yyyy-MM-dd HH:mm>`
 
-- [x] Managing tasks
-- [x] Managing deadlines
-- [x] Managing events
-- [ ] Reminders *(Coming soon)*
+Katsu will add the specified tasks into your task list so you can easily keep track of them!
 
-## Preview of Katsu
-   ```
-    ____________________________________________________________
-     _  __     _
-    | |/ /__ _| |_ ___ _   _
-    | ' // _` | __/ __| | | |
-    | . \ (_| | |_\__ \ |_| |
-    |_|\_\__,_|\__|___/\__,_|
-
-    Hello! I'm Katsu the Duck ꒰ঌ( •ө• )໒꒱
-    What can I do for you?
-    ____________________________________________________________
-   ```
-
-If you are a Java programmer, you can use it to practice Java too. Here's the ```main``` method:
-```Java
-public class Main {
-    public static void main(String[] args) {
-        Application.launch(MainApp.class, args);
-    }
-}
+Here's an example outcome if you were to run `todo Read book`:
+```
+Quack! I've added the task below to your list:
+[T][ ] Read book
+You now have 1 task in the list.
 ```
 
+### ✅ Mark and Unmark
+
+Mark tasks as completed or unmark them using `mark` and `unmark` command.
+
+Example:
+- `mark <task's number>`
+- `unmark <task's number>`
+
+Katsu will mark the specified task in your task list.
+
+Here'a an example outcome if you were to run `mark 1`:
+```
+Quack! I have marked this task as completed:
+[T][X] Read book
+```
+
+
+### 🗑️ Delete
+
+Remove tasks from your list using the `delete` command.
+
+Example:
+- `delete <task's number>`
+
+Katsu will remove the specified task from your task list.
+
+Here's an example outcome if you were to run `delete 1`:
+```
+Quack! I've removed the task below from your list:
+[T][X] Read book
+You have no more task in the list.
+```
+
+### 🔍 Find
+
+Search for tasks containing specific keywords using the find command.
+
+Example:
+- `find <keywords>`
+
+Katsu will display all tasks that match your search term.
+
+Here's an example outcome if you were to run `find book`:
+```
+Quack! Here are the matching tasks in your list:
+1.[T][ ] Read book
+2.[T][X] Return library book
+```
+
+### 💾 Save
+
+You tasks will be saved when you close the window or run the command `bye` which will also close the window!
+
+The application automatically loads your saved tasks when you start it up again.
+
+## Getting Started
+
+1. Ensure you have Java-17 downloaded
+2. Download the latest version of Katsu
+3. Run the jar file using `java -jar katsu.jar `
+4. Type your commands and press Enter to execute them
+5. Type `bye` to exit the application
+
+## Support
+
+If you encounter any issues or have questions, please contact our support team. Happy task managing! ˗ˏˋ𓅭ˎˊ˗

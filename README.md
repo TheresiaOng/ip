@@ -58,7 +58,7 @@ You have no more task in the list.
 
 ### 🔍 Find
 
-Search for tasks containing specific keywords using the find command.
+Search for tasks containing specific keywords using the `find` command.
 
 Example:
 - `find <keywords>`
@@ -86,6 +86,11 @@ The application automatically loads your saved tasks when you start it up again.
 4. Type your commands and press Enter to execute them
 5. Type `bye` to exit the application
 
-## Support
+## ❓Need Help?
 
-If you encounter any issues or have questions, please contact our support team. Happy task managing! ˗ˏˋ𓅭ˎˊ˗
+If you encounter any issues or have questions about using Katsu, here are some tips:
+- Double-check your command format using the examples above 
+- Make sure date formats follow the pattern `yyyy-MM-dd HH:mm` 
+- Task numbers should correspond to the numbers shown in your task list
+
+You can also refer back to this guide anytime for command references. Happy task managing! ˗ˏˋ𓅭ˎˊ

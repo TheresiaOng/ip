@@ -1,6 +1,6 @@
 # Katsu User Guide
 
-![Katsu](Ui.png)
+![Katsu](docs/Ui.png)
 
 Katsu is your personal assistant that lets you keep track of your daily and future tasks! ˗ˏˋ𓅭ˎˊ˗
 
@@ -9,7 +9,7 @@ Katsu is your personal assistant that lets you keep track of your daily and futu
 
 Add different tasks easily using `todo`, `event`, or `deadline` commands.
 
-Example: 
+Example:
 - `todo <task's description>`
 - `deadline <deadline's description> /by <yyyy-MM-dd HH:mm>`
 - `event <event's description> /from <yyyy-MM-dd HH:mm> /to <yyyy-MM-dd HH:mm>`
@@ -58,7 +58,7 @@ You have no more task in the list.
 
 ### 🔍 Find
 
-Search for tasks containing specific keywords using the find command.
+Search for tasks containing specific keywords using the `find` command.
 
 Example:
 - `find <keywords>`
@@ -80,12 +80,17 @@ The application automatically loads your saved tasks when you start it up again.
 
 ## Getting Started
 
-1. Ensure you have Java-17 downloaded 
+1. Ensure you have Java-17 downloaded
 2. Download the latest version of Katsu
 3. Run the jar file using `java -jar katsu.jar `
-4. Type your commands and press Enter to execute them 
+4. Type your commands and press Enter to execute them
 5. Type `bye` to exit the application
 
-## Support
+## ❓Need Help?
 
-If you encounter any issues or have questions, please contact our support team. Happy task managing! ˗ˏˋ𓅭ˎˊ˗
+If you encounter any issues or have questions about using Katsu, here are some tips:
+- Double-check your command format using the examples above
+- Make sure date formats follow the pattern `yyyy-MM-dd HH:mm`
+- Task numbers should correspond to the numbers shown in your task list
+
+You can also refer back to this guide anytime for command references. Happy task managing! ˗ˏˋ𓅭ˎˊ

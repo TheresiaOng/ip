@@ -78,7 +78,7 @@ You tasks will be saved when you close the window or run the command `bye` which
 
 The application automatically loads your saved tasks when you start it up again.
 
-## Getting Started
+## Getting Started ⚙️
 
 1. Ensure you have Java-17 downloaded
 2. Download the latest version of Katsu
@@ -86,7 +86,7 @@ The application automatically loads your saved tasks when you start it up again.
 4. Type your commands and press Enter to execute them
 5. Type `bye` to exit the application
 
-## ❓Need Help?
+## Need Help❓
 
 If you encounter any issues or have questions about using Katsu, here are some tips:
 - Double-check your command format using the examples above
